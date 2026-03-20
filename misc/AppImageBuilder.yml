@@ -3,8 +3,8 @@ version: 1
 AppDir:
   path: AppDir
   app_info:
-    id: org.luanti.luanti
-    name: Luanti
+    id: org.novaxgames.wintercraftreborn
+    name: Wintercraft Reborn
     icon: luanti
     version: !ENV ${VERSION}
     exec: usr/bin/luanti

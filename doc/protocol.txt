@@ -1,4 +1,4 @@
-Luanti protocol (incomplete, early draft):
+Wintercraft Reborn protocol (incomplete, early draft):
 Updated 2011-06-18
 
 A custom protocol over UDP.
@@ -71,7 +71,7 @@ function check_if_minetestserver_up($host, $port)
 	return false;
 }
 
-- Here's a Python script for checking if a Luanti server is up, confirmed working
+- Here's a Python script for checking if a Wintercraft Reborn server is up, confirmed working
 
 #!/usr/bin/env python3
 import sys, time, socket

@@ -1,4 +1,4 @@
--- Luanti
+-- Wintercraft Reborn
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 -- Modified based on dlg_reinstall_mtg.lua
 -- Note that this is only needed for migrating from <5.11 to 5.12.
@@ -9,7 +9,7 @@ local SETTING_NAME = "no_keycode_migration_warning"
 local function get_formspec(dialogdata)
 	local markup = table.concat({
 		"<big>" .. hgettext("Keybindings changed") .. "</big>",
-		hgettext("The input handling system was reworked in Luanti 5.12.0."),
+		hgettext("The input handling system was reworked in Wintercraft Reborn 5.12.0."),
 		hgettext("As a result, your keybindings may have been changed."),
 		hgettext("Check out the key settings or refer to the documentation:"),
 		("<action name='doc_url'><style color='cyan' hovercolor='orangered'>%s</style></action>"):format(doc_url),
@@ -61,7 +61,7 @@ local function eventhandler(event)
 		return true
 	elseif event == "MenuQuit" then
 		-- Don't allow closing the dialog with ESC, but still allow exiting
-		-- Luanti
+		-- Wintercraft Reborn
 		core.close()
 		return true
 	end

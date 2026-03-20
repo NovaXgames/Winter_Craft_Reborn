@@ -1,13 +1,13 @@
 <div align="center">
     <img src="textures/base/pack/logo.png" width="32%">
-    <h1>Luanti (formerly Minetest)</h1>
-    <img src="https://github.com/luanti-org/luanti/workflows/build/badge.svg" alt="Build Status">
-    <a href="https://hosted.weblate.org/engage/minetest/?utm_source=widget"><img src="https://hosted.weblate.org/widgets/minetest/-/svg-badge.svg" alt="Translation status"></a>
+    <h1>Wintercraft Reborn</h1>
+    <img src="https://img.shields.io/github/actions/workflow/status/NovaXgames/Winter_Craft_Reborn/android.yml?branch=master&label=android" alt="Build Status">
+    <a href="https://github.com/NovaXgames/Winter_Craft_Reborn"><img src="https://img.shields.io/badge/repo-GitHub-black.svg" alt="Repository"></a>
     <a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html"><img src="https://img.shields.io/badge/license-LGPLv2.1%2B-blue.svg" alt="License"></a>
 </div>
 <br>
 
-Luanti is a free open-source voxel game engine with easy modding and game creation.
+Wintercraft Reborn is a free open-source voxel game engine with easy modding and game creation.
 
 Copyright (C) 2010-2026 Perttu Ahola <celeron55@gmail.com>
 and contributors (see source file comments and the version control log)
@@ -27,10 +27,9 @@ Table of Contents
 
 Further documentation
 ----------------------
-- Website: https://www.luanti.org/
-- Luanti Documentation: https://docs.luanti.org/
-- Forum: https://forum.luanti.org/
-- GitHub: https://github.com/luanti-org/luanti/
+- Website: https://github.com/NovaXgames/Winter_Craft_Reborn
+- Wintercraft Reborn Documentation: https://github.com/NovaXgames/Winter_Craft_Reborn/tree/master/doc
+- GitHub: https://github.com/NovaXgames/Winter_Craft_Reborn
 - [Developer documentation](doc/developing/)
 - [doc/](doc/) directory of source distribution
 
@@ -108,7 +107,7 @@ Configuration file
 ------------------
 - Default location:
     `user/minetest.conf`
-- This file is created by closing Luanti for the first time.
+- This file is created by closing Wintercraft Reborn for the first time.
 - A specific file can be specified on the command line:
     `--config <path-to-file>`
 - A run-in-place build will look for the configuration file in

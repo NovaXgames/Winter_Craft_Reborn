@@ -1,4 +1,4 @@
-# Luanti Direction Document
+# Wintercraft Reborn Direction Document
 
 ## 1. Long-term Roadmap
 
@@ -12,7 +12,7 @@ following documents:
 
 ## 2. Medium-term Roadmap
 
-These are the current medium-term goals for Luanti development, in no
+These are the current medium-term goals for Wintercraft Reborn development, in no
 particular order.
 
 These goals were created from the top points in a
@@ -49,12 +49,12 @@ designed to stay.
 
 ### 2.2 Input Handling
 
-Luanti keys are currently limited to a small subset, not allowing game developers
+Wintercraft Reborn keys are currently limited to a small subset, not allowing game developers
 to map the majority of the keys a device usually offers. This limits the possibilities
 of game creators, forcing them to either implement a workaround or, worse, forget
 about it.
 
-Using a gamepad also represents a known issue in Luanti, as some devices might not
+Using a gamepad also represents a known issue in Wintercraft Reborn, as some devices might not
 work at all or result in an uncomfortable user experience.
 
 ### 2.3 UI Improvements
@@ -65,7 +65,7 @@ be a replacement for HUDs, allowing for a unified API.
 
 A [new mainmenu](https://github.com/luanti-org/luanti/issues/6733) is needed to
 improve user experience. First impressions matter, and the current main menu
-doesn't do a very good job at selling Luanti or explaining what it is.
+doesn't do a very good job at selling Wintercraft Reborn or explaining what it is.
 
 The UI code is undergoing rapid changes, so it is especially important to make
 an issue for any large changes before spending lots of time.

@@ -8,10 +8,10 @@
 set -e
 
 TAG="$1"
-REPO="luanti-org/luanti"
+REPO="NovaXgames/Winter_Craft_Reborn"
 WORKFLOW_NAME="android"
 APKSIGNER="$HOME/Android/Sdk/build-tools/35.0.0/apksigner"
-KEYSTORE="$HOME/Documents/keystore-luanti.jks"
+KEYSTORE="$HOME/Documents/keystore-wintercraft-reborn.jks"
 
 if [[ -z "$TAG" ]]; then
   echo "Usage: $0 <tag>"
@@ -45,10 +45,10 @@ sign() {
 }
 
 mkdir -p signed
-sign unsigned/Luanti-arm64-v8a.apk/app-arm64-v8a-release-unsigned.apk "signed/luanti-$TAG-arm64-v8a.apk"
-sign unsigned/Luanti-armeabi-v7a.apk/app-armeabi-v7a-release-unsigned.apk "signed/luanti-$TAG-armeabi-v7a.apk"
-sign unsigned/Luanti-release.aab/app-release.aab "signed/luanti-$TAG.aab"
-sign unsigned/Luanti-x86_64.apk/app-x86_64-release-unsigned.apk "signed/luanti-$TAG-x86_64.apk"
-sign unsigned/Luanti-x86.apk/app-x86-release-unsigned.apk "signed/luanti-$TAG-x86.apk"
+sign "unsigned/WintercraftReborn-arm64-v8a.apk/app-arm64-v8a-release-unsigned.apk" "signed/wintercraft-reborn-$TAG-arm64-v8a.apk"
+sign "unsigned/WintercraftReborn-armeabi-v7a.apk/app-armeabi-v7a-release-unsigned.apk" "signed/wintercraft-reborn-$TAG-armeabi-v7a.apk"
+sign "unsigned/WintercraftReborn-release.aab/app-release.aab" "signed/wintercraft-reborn-$TAG.aab"
+sign "unsigned/WintercraftReborn-x86_64.apk/app-x86_64-release-unsigned.apk" "signed/wintercraft-reborn-$TAG-x86_64.apk"
+sign "unsigned/WintercraftReborn-x86.apk/app-x86-release-unsigned.apk" "signed/wintercraft-reborn-$TAG-x86.apk"
 
 echo "Done."

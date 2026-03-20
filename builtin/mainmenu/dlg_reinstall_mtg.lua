@@ -1,4 +1,4 @@
--- Luanti
+-- Wintercraft Reborn
 -- Copyright (C) 2023 Gregor Parzefall
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 
@@ -55,8 +55,8 @@ end
 local function get_formspec(dialogdata)
 	local markup = table.concat({
 		"<big>", hgettext("Minetest Game is no longer installed by default"), "</big>\n",
-		hgettext("For a long time, Luanti shipped with a default game called \"Minetest Game\". " ..
-				"Since version 5.8.0, Luanti ships without a default game."), "\n",
+		hgettext("For a long time, Wintercraft Reborn shipped with a default game called \"Minetest Game\". " ..
+				"Since version 5.8.0, Wintercraft Reborn ships without a default game."), "\n",
 		hgettext("If you want to continue playing in your Minetest Game worlds, you need to reinstall Minetest Game."),
 	})
 
@@ -101,7 +101,7 @@ local function eventhandler(event)
 		return true
 	elseif event == "MenuQuit" then
 		-- Don't allow closing the dialog with ESC, but still allow exiting
-		-- Luanti
+		-- Wintercraft Reborn
 		core.close()
 		return true
 	end

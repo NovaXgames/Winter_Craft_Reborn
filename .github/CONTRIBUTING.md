@@ -14,7 +14,7 @@ Contributions are welcome! Here's how you can help:
    [clone](https://help.github.com/articles/cloning-a-repository/) your fork.
 
 2. Before you start coding, consider opening an
-   [issue on Github](https://github.com/NovaXdevs/Winter_Craft_Reborn/issues) to discuss the
+   [issue on Github](https://github.com/NovaXgames/Winter_Craft_Reborn/issues) to discuss the
    suitability and implementation of your intended contribution with the NovaX developers.
 
    Any Pull Request that isn't a bug fix and isn't covered by
@@ -29,7 +29,7 @@ Contributions are welcome! Here's how you can help:
 3. Start coding!
     - Refer to the
       [Lua API](doc/lua_api.md),
-      [Winter Craft Reborn Documentation](https://github.com/NovaXdevs/Winter_Craft_Reborn/tree/master/doc).
+      [Wintercraft Reborn Documentation](https://github.com/NovaXgames/Winter_Craft_Reborn/tree/master/doc).
     - Follow the [C/C++](https://docs.luanti.org/for-engine-devs/code-style-guidelines/) and
       [Lua](https://docs.luanti.org/for-engine-devs/lua-code-style-guidelines/) code style guidelines (until we publish our own).
     - Check your code works as expected and document any changes to the Lua API.
@@ -50,7 +50,7 @@ Contributions are welcome! Here's how you can help:
     - The following lines should describe the commit, starting a new line for each point.
 
 5. Once you are happy with your changes, submit a pull request.
-     - Open the [pull-request form](https://github.com/NovaXdevs/Winter_Craft_Reborn/pull/new/master).
+     - Open the [pull-request form](https://github.com/NovaXgames/Winter_Craft_Reborn/pull/new/master).
      - Add a description explaining what you've done (or if it's a
        work-in-progress - what you need to do).
      - Make sure to fill out the pull request template.
@@ -74,12 +74,12 @@ a stable release is on the way.
 
 1. Do a quick search on GitHub to check if the issue has already been reported.
 2. Is it an issue with the **engine**? If not, report it in the appropriate repo (e.g. mods).
-3. [Open an issue](https://github.com/NovaXdevs/Winter_Craft_Reborn/issues/new) and describe
+3. [Open an issue](https://github.com/NovaXgames/Winter_Craft_Reborn/issues/new) and describe
    the issue you are having - you could include:
      - Error logs (check the bottom of the `debug.txt` file).
      - Screenshots.
      - Ways you have tried to solve the issue, and whether they worked or not.
-     - Your Winter Craft Reborn version and the content (games, mods or texture packs) you have installed.
+     - Your Wintercraft Reborn version and the content (games, mods or texture packs) you have installed.
      - Your platform (e.g. Windows 10, Ubuntu 22.04 x64, Android 14).
 
 After reporting you should aim to answer questions or clarifications as this
@@ -95,18 +95,18 @@ possible.
 
 ## Translations
 
-Translations for Winter Craft Reborn are welcome!  
+Translations for Wintercraft Reborn are welcome!
 We will provide a dedicated Weblate/Translation platform, but until then translations
 can be contributed by editing `.po` files in the repo.
 
 ## Donations
 
-If you'd like to monetarily support Winter Craft Reborn development and NovaX Hosting,
+If you'd like to monetarily support Wintercraft Reborn development and NovaX Hosting,
 donation methods will be published soon on our official website.
 
 # Maintaining
 
-* This is a concise version of the Rules & Guidelines adapted from Luanti.*
+* This is a concise version of the Rules & Guidelines adapted from Wintercraft Reborn.*
 
 These notes are for those who have push access (core developers / maintainers).
 
@@ -147,13 +147,13 @@ Submit a :+1: (+1) or "Looks good" comment to show you believe the pull-request 
     - The title should follow the commit guidelines (title starts with a capital letter, present tense, descriptive).
     - Don't modify history older than 10 minutes.
     - Use rebase, not merge to get linear history:
-    - `curl -Ls https://github.com/NovaXdevs/Winter_Craft_Reborn/pull/1.patch | git am`
+    - `curl -Ls https://github.com/NovaXgames/Winter_Craft_Reborn/pull/1.patch | git am`
 
 ## Reviewing issues and feature requests
 
 - If an issue does not get a response from its author within 1 month (when requiring more details), it can be closed.
 - When an issue is a duplicate, refer to the first ones and close the later ones.
-- Tag issues with the appropriate [labels](https://github.com/NovaXdevs/Winter_Craft_Reborn/labels) for devices, platforms etc.
+- Tag issues with the appropriate [labels](https://github.com/NovaXgames/Winter_Craft_Reborn/labels) for devices, platforms etc.
 
 ## Releasing a new version
 

@@ -1,4 +1,4 @@
--- Luanti
+-- Wintercraft Reborn
 -- Copyright (C) 2024 cx384
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 

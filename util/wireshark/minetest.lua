@@ -1,8 +1,8 @@
 -- minetest.lua
--- Packet dissector for the UDP-based Luanti protocol
+-- Packet dissector for the UDP-based Wintercraft Reborn protocol
 -- Copy this to $HOME/.wireshark/plugins/
 
--- Luanti
+-- Wintercraft Reborn
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 -- Copyright (C) 2011 celeron55, Perttu Ahola <celeron55@gmail.com>
 
@@ -1085,7 +1085,7 @@ minetest_server_commands[0x63] = {"SET_LIGHTING", 2}
 -- minetest.control dissector
 
 do
-	local p_control = Proto("minetest.control", "Luanti Control")
+	local p_control = Proto("minetest.control", "Wintercraft Reborn Control")
 
 	local vs_control_type = {
 		[0] = "Ack",
@@ -1159,7 +1159,7 @@ function minetest_define_client_or_server_proto(is_client)
 	end
 
 	-- Create the protocol object.
-	local proto = Proto(proto_name, "Luanti " .. this_peer .. " to " .. other_peer)
+	local proto = Proto(proto_name, "Wintercraft Reborn " .. this_peer .. " to " .. other_peer)
 
 	-- Create a table vs_command that maps command codes to command names.
 	local vs_command = {}
@@ -1234,7 +1234,7 @@ minetest_define_client_or_server_proto(false) -- minetest.server
 -- minetest.split dissector
 
 do
-	local p_split = Proto("minetest.split", "Luanti Split Message")
+	local p_split = Proto("minetest.split", "Wintercraft Reborn Split Message")
 
 	local f_split_seq = ProtoField.uint16("minetest.split.seq", "Sequence number", base.DEC)
 	local f_split_chunkcount = ProtoField.uint16("minetest.split.chunkcount", "Chunk count", base.DEC)
@@ -1272,7 +1272,7 @@ end
 -------------------------------------
 
 do
-	local p_minetest = Proto("minetest", "Luanti")
+	local p_minetest = Proto("minetest", "Wintercraft Reborn")
 
 	local minetest_id = 0x4f457403
 	local vs_id = {
@@ -1318,15 +1318,15 @@ do
 		t:add(f_id, buffer(0,4))
 
 		-- ID is valid, so replace packet's shown protocol
-		pinfo.cols.protocol = "Luanti"
-		pinfo.cols.info = "Luanti"
+		pinfo.cols.protocol = "Wintercraft Reborn"
+		pinfo.cols.info = "Wintercraft Reborn"
 
 		-- Set the other header fields
 		local peer_id = buffer(4,2):uint()
 		t:add(f_peer, buffer(4,2))
 		t:add(f_channel, buffer(6,1))
 		t:add(f_type, buffer(7,1))
-		t:set_text("Luanti, Peer: " .. peer_id .. ", Channel: " .. buffer(6,1):uint())
+		t:set_text("Wintercraft Reborn, Peer: " .. peer_id .. ", Channel: " .. buffer(6,1):uint())
 
 		local reliability_info
 		local pos

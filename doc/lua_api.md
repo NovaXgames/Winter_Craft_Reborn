@@ -1,8 +1,8 @@
-Luanti Lua Modding API Reference
+Wintercraft Reborn Lua Modding API Reference
 ================================
 
 **WARNING**: if you're looking for the `minetest` namespace (e.g. `minetest.something`),
-it's now called `core` due to the renaming of Luanti (formerly Minetest).
+it's now called `core` due to the renaming of Wintercraft Reborn (formerly Minetest).
 `minetest` will keep existing as an alias, so that old code won't break.
 
 Note that `core` has already existed since version 0.4.10, so you can use it
@@ -10,17 +10,17 @@ safely without breaking backwards compatibility.
 
 * More information at <http://www.luanti.org/>
 * Additional documentation: <https://docs.luanti.org/>
-* (Unofficial) Luanti Modding Book by rubenwardy: <https://rubenwardy.com/minetest_modding_book/>
+* (Unofficial) Wintercraft Reborn Modding Book by rubenwardy: <https://rubenwardy.com/minetest_modding_book/>
 * Modding tools: <https://github.com/luanti-org/modtools>
 
 Introduction
 ------------
 
-Content and functionality can be added to Luanti using Lua scripting
+Content and functionality can be added to Wintercraft Reborn using Lua scripting
 in run-time loaded mods.
 
 A mod is a self-contained bunch of scripts, textures and other related
-things, which is loaded by and interfaces with Luanti.
+things, which is loaded by and interfaces with Wintercraft Reborn.
 
 Mods are contained and ran solely on the server side. Definitions and media
 files are automatically transferred to the client.
@@ -43,7 +43,7 @@ the `init.lua` scripts in a shared environment.
 Paths
 -----
 
-Luanti keeps and looks for files mostly in two paths. `path_share` or `path_user`.
+Wintercraft Reborn keeps and looks for files mostly in two paths. `path_share` or `path_user`.
 
 `path_share` contains possibly read-only content for the engine (incl. games and mods).
 `path_user` contains mods or games installed by the user but also the users
@@ -169,7 +169,7 @@ Mods can be put in a subdirectory, if the parent directory, which otherwise
 should be a mod, contains a file named `modpack.conf`.
 The file is a key-value store of modpack details.
 
-* `name`: The modpack name. Allows Luanti to determine the modpack name even
+* `name`: The modpack name. Allows Wintercraft Reborn to determine the modpack name even
           if the folder is wrongly named.
 * `title`: A human-readable title to address the modpack. See [Translating content meta](#translating-content-meta).
 * `description`: Description of mod to be shown in the Mods tab of the main
@@ -213,7 +213,7 @@ The location of this directory can be fetched by using
 
 A `Settings` file that provides meta information about the mod.
 
-* `name`: The mod name. Allows Luanti to determine the mod name even if the
+* `name`: The mod name. Allows Wintercraft Reborn to determine the mod name even if the
           folder is wrongly named.
 * `title`: A human-readable title to address the mod. See [Translating content meta](#translating-content-meta).
 * `description`: Description of mod to be shown in the Mods tab of the main
@@ -267,7 +267,7 @@ See [Settings](#settings).
 ### `init.lua`
 
 The main Lua script. Running this script should register everything it
-wants to register. Subsequent execution depends on Luanti calling the
+wants to register. Subsequent execution depends on Wintercraft Reborn calling the
 registered callbacks.
 
 ### `textures`, `sounds`, `media`, `models`, `locale`, `fonts`
@@ -347,7 +347,7 @@ Do not rely on glTF features not being supported; they may be supported in the f
 The backwards compatibility guarantee does not extend to ignoring unsupported features.
 
 For example, if your model used an emissive material,
-you should expect that a future version of Luanti may respect this,
+you should expect that a future version of Wintercraft Reborn may respect this,
 and thus cause your model to render differently there.
 
 #### Custom fonts
@@ -356,12 +356,12 @@ You can supply custom fonts in TrueType Font (`.ttf`) or Web Open Font Format (`
 The former is supported primarily for convenience. The latter is preferred due to its compression.
 
 In the future, having multiple custom fonts and the ability to switch between them is planned,
-but for now this feature is limited to the ability to override Luanti's default fonts via mods.
+but for now this feature is limited to the ability to override Wintercraft Reborn's default fonts via mods.
 It is recommended that this only be used by game mods to set a look and feel.
 
-Warning: Currently the Luanti client does not support reading kerning information
+Warning: Currently the Wintercraft Reborn client does not support reading kerning information
 from the OpenType `GPOS` table, but only the older `kern` table. This can cause
-modern fonts not to render correctly in Luanti.
+modern fonts not to render correctly in Wintercraft Reborn.
 
 The stems (file names without extension) are self-explanatory:
 
@@ -528,7 +528,7 @@ stripping out the file extension:
 
 Supported texture formats are PNG (`.png`), JPEG (`.jpg`) and Targa (`.tga`).
 
-Luanti generally uses nearest-neighbor upscaling for textures to preserve the crisp
+Wintercraft Reborn generally uses nearest-neighbor upscaling for textures to preserve the crisp
 look of pixel art (low-res textures).
 Users can optionally enable bilinear and/or trilinear filtering. However, to avoid
 everything becoming blurry, textures smaller than 192px will either not be filtered,
@@ -1072,7 +1072,7 @@ Soft texture overlay
 --------------------
 
 Sometimes hardware coloring is not enough, because it affects the
-whole tile. Soft texture overlays were added to Luanti to allow
+whole tile. Soft texture overlays were added to Wintercraft Reborn to allow
 the dynamic coloring of only specific parts of the node's texture.
 For example a grass block may have colored grass, while keeping the
 dirt brown.
@@ -1857,7 +1857,7 @@ Displays text on the HUD.
   and `core.colorize` (since protocol version 44)
 * `number`: An integer containing the (A)RGB value of the color used to draw the
   text. Specify `0xFFFFFF` for white text, `0x80FF0000` for semi-transparent red, and so on.
-    * Alpha only works on Luanti 5.15+ clients. Older clients will see the text as opaque.
+    * Alpha only works on Wintercraft Reborn 5.15+ clients. Older clients will see the text as opaque.
     * To completely hide a text, set `text` to `""`. Setting the alpha value to `00`
       will not work due to compatibility reasons (it'll be treated as `FF`).
 * `alignment`: The alignment of the text.
@@ -2787,7 +2787,7 @@ reserved to pass key press events to formspec!
 **WARNING**: names and values of elements cannot contain binary data such as ASCII
 control characters. For values, escape sequences used by the engine are an exception to this.
 
-**WARNING**: Luanti allows you to add elements to every single formspec instance
+**WARNING**: Wintercraft Reborn allows you to add elements to every single formspec instance
 using `player:set_formspec_prepend()`, which may be the reason backgrounds are
 appearing when you don't expect them to, or why things are styled differently
 to normal. See [`no_prepend[]`] and [Styling Formspecs](#styling-formspecs).
@@ -3929,19 +3929,19 @@ The following functions provide escape sequences:
     * Removes all color escape sequences.
 * `core.strip_escapes(str)`
     * Removes all escape sequences, including client-side translations and
-      any unknown or future escape sequences that Luanti might define.
+      any unknown or future escape sequences that Wintercraft Reborn might define.
     * You can use this to clean text before logging or handing to an external system.
 
 
 Coordinate System
 =================
 
-Luanti uses a **left-handed** coordinate system: Y is "up", X is "right", Z is "forward".
+Wintercraft Reborn uses a **left-handed** coordinate system: Y is "up", X is "right", Z is "forward".
 This is the convention used by Unity, DirectX and Irrlicht.
 It means that when you're pointing in +Z direction in-game ("forward"), +X is to your right; +Y is up.
 
 Consistently, rotation is [**left-handed**](https://en.wikipedia.org/w/index.php?title=Right-hand_rule) as well.
-Luanti uses [Tait-Bryan angles](https://en.wikipedia.org/wiki/Euler_angles#Tait%E2%80%93Bryan_angles) for rotations,
+Wintercraft Reborn uses [Tait-Bryan angles](https://en.wikipedia.org/wiki/Euler_angles#Tait%E2%80%93Bryan_angles) for rotations,
 often referred to simply as "euler angles" (even though they are not "proper" euler angles).
 The rotation order is extrinsic X-Y-Z:
 First rotation around the (unrotated) X-axis is applied,
@@ -3964,7 +3964,7 @@ for a more detailed and pictorial explanation of these terms.
 Spatial Vectors
 ===============
 
-Luanti stores 3-dimensional spatial vectors in Lua as tables of 3 coordinates,
+Wintercraft Reborn stores 3-dimensional spatial vectors in Lua as tables of 3 coordinates,
 and has a class to represent them (`vector.*`), which this chapter is about.
 For details on what a spatial vectors is, please refer to Wikipedia:
 https://en.wikipedia.org/wiki/Euclidean_vector.
@@ -3996,7 +3996,7 @@ Note: Those old-style vectors can still be found in old mod code. Hence, mod and
 engine APIs still need to be able to cope with them in many places.
 
 Manually constructed tables are deprecated and highly discouraged. This interface
-should be used to ensure seamless compatibility between mods and the Luanti API.
+should be used to ensure seamless compatibility between mods and the Wintercraft Reborn API.
 This is especially important to callback function parameters and functions overwritten
 by mods.
 Also, though not likely, the internal implementation of a vector might change in
@@ -4492,7 +4492,7 @@ Hello @1, how are you today?=Hallo @1, wie geht es dir heute?
 ```
 
 For old translation files, consider using the script `mod_translation_updater.py`
-in the Luanti [modtools](https://github.com/luanti-org/modtools) repository to
+in the Wintercraft Reborn [modtools](https://github.com/luanti-org/modtools) repository to
 generate and update translation files automatically from the Lua sources.
 
 Gettext translation file format
@@ -4563,7 +4563,7 @@ Say you have a mod called `mymod` with a short description in mod.conf:
 description = This is the short description
 ```
 
-Luanti will look for translations in the `mymod` textdomain as there's no
+Wintercraft Reborn will look for translations in the `mymod` textdomain as there's no
 textdomain specified in mod.conf. For example, `mymod/locale/mymod.fr.tr`:
 
 ```
@@ -4573,7 +4573,7 @@ This is the short description=Voici la description succincte
 
 ### Games and Modpacks
 
-For games and modpacks, Luanti will look for the textdomain in all mods.
+For games and modpacks, Wintercraft Reborn will look for the textdomain in all mods.
 
 Say you have a game called `mygame` with the following game.conf:
 
@@ -4582,7 +4582,7 @@ description = This is the game's short description
 textdomain = mygame
 ```
 
-Luanti will then look for the textdomain `mygame` in all mods, for example,
+Wintercraft Reborn will then look for the textdomain `mygame` in all mods, for example,
 `mygame/mods/anymod/locale/mygame.fr.tr`. Note that it is still recommended that your
 textdomain match the mod name, but this isn't required.
 
@@ -4595,7 +4595,7 @@ Value noise creates a continuously-varying value depending on the input values.
 It is similar to Perlin noise, but may exhibit more geometric artifacts,
 as it interpolates between values and not between gradients as in Perlin noise.
 
-Usually in Luanti the input values are either 2D or 3D coordinates in nodes.
+Usually in Wintercraft Reborn the input values are either 2D or 3D coordinates in nodes.
 The result is used during map generation to create the terrain shape, vary heat
 and humidity to distribute biomes, vary the density of decorations or vary the
 structure of ores.
@@ -4951,7 +4951,7 @@ Schematic specifier
 --------------------
 
 A schematic specifier identifies a schematic by either a filename to a
-Luanti Schematic file (`.mts`) or through raw data supplied through Lua,
+Wintercraft Reborn Schematic file (`.mts`) or through raw data supplied through Lua,
 in the form of a table.  This table specifies the following fields:
 
 * The `size` field is a 3D vector containing the dimensions of the provided
@@ -5304,7 +5304,7 @@ Methods
 A helper class for voxel areas.
 It can be created via `VoxelArea(pmin, pmax)` or
 `VoxelArea:new({MinEdge = pmin, MaxEdge = pmax})`.
-The coordinates are *inclusive*, like most other things in Luanti.
+The coordinates are *inclusive*, like most other things in Wintercraft Reborn.
 
 ### Methods
 
@@ -5638,8 +5638,8 @@ and `core.register_on_priv_revoke` functions.
 Built-in privileges
 -------------------
 
-Luanti includes a set of built-in privileges that control capabilities
-provided by the Luanti engine and can be used by mods:
+Wintercraft Reborn includes a set of built-in privileges that control capabilities
+provided by the Wintercraft Reborn engine and can be used by mods:
 
   * Basic privileges are normally granted to all players:
       * `shout`: can communicate using the in-game chat.
@@ -5678,7 +5678,7 @@ provided by the Luanti engine and can be used by mods:
 Related settings
 ----------------
 
-Luanti includes the following settings to control behavior of privileges:
+Wintercraft Reborn includes the following settings to control behavior of privileges:
 
    * `default_privs`: defines privileges granted to new players.
    * `basic_privs`: defines privileges that can be granted/revoked by players having
@@ -5721,7 +5721,7 @@ Utilities
     * Useful for storing custom data *independently of worlds*.
     * Must be called during mod load time.
     * Can read or write to this directory at any time.
-    * It's possible that multiple Luanti instances are running at the same
+    * It's possible that multiple Wintercraft Reborn instances are running at the same
       time, which may lead to corruption if you are not careful.
 * `core.is_singleplayer()`
 * `core.features`: Table containing *server-side* API feature flags
@@ -5884,7 +5884,7 @@ Utilities
       -- or inconsistent in engine forks. You must not use this for checking
       -- feature availability of clients. Instead, do use the fields
       -- `protocol_version` and `formspec_version` where it matters.
-      -- Use `core.protocol_versions` to map Luanti versions to protocol versions.
+      -- Use `core.protocol_versions` to map Wintercraft Reborn versions to protocol versions.
       -- This version string is only suitable for analysis purposes.
       version_string = "0.4.9-git",   -- full version string
 
@@ -5899,9 +5899,9 @@ Utilities
   ```
 
 * `core.protocol_versions`:
-  * Table mapping Luanti versions to corresponding protocol versions for modder convenience.
+  * Table mapping Wintercraft Reborn versions to corresponding protocol versions for modder convenience.
   * For example, to check whether a client has at least the feature set
-    of Luanti 5.8.0 or newer, you could do:
+    of Wintercraft Reborn 5.8.0 or newer, you could do:
     `core.get_player_information(player_name).protocol_version >= core.protocol_versions["5.8.0"]`
   * (available since 5.11)
 
@@ -5934,7 +5934,7 @@ Utilities
           y = 577,
       },
 
-      -- Estimated maximum formspec size before Luanti will start shrinking the
+      -- Estimated maximum formspec size before Wintercraft Reborn will start shrinking the
       -- formspec to fit. For a fullscreen formspec, use the size returned by
       -- this table  and `padding[0,0]`. `bgcolor[;true]` is also recommended.
       max_formspec_size = {
@@ -5986,7 +5986,7 @@ Utilities
       `local f = io.open(path, "wb"); f:write(content); f:close()`
 * `core.get_version()`: returns a table containing components of the
    engine version.  Components:
-    * `project`: Name of the project, eg, "Luanti"
+    * `project`: Name of the project, eg, "Wintercraft Reborn"
     * `string`: Simple version, eg, "1.2.3-dev"
     * `proto_min`: The minimum supported protocol version
     * `proto_max`: The maximum supported protocol version
@@ -6425,7 +6425,7 @@ Authentication
     * Only use this function for making it possible to log in via password from
       external protocols such as IRC, other uses are frowned upon.
 * `core.get_password_hash(name, raw_password)`
-    * Convert a name-password pair to a password hash that Luanti can use.
+    * Convert a name-password pair to a password hash that Wintercraft Reborn can use.
     * The returned value alone is not a good basis for password checks based
       on comparing the password hash in the database with the password hash
       from the function, with an externally provided password, as the hash
@@ -7526,7 +7526,7 @@ Schematics
               applied, the lowest slice being `ypos = 0`.
             * If slice probability list equals `nil`, no slice probabilities
               are applied.
-    * Saves schematic in the Luanti Schematic format to filename.
+    * Saves schematic in the Wintercraft Reborn Schematic format to filename.
 
 * `core.place_schematic(pos, schematic, rotation, replacements, force_placement, flags)`
     * Place the schematic specified by schematic (see [Schematic specifier](#schematic-specifier)) at
@@ -7601,7 +7601,7 @@ HTTP Requests
       `fetch_async_get` described below.
     * Only works at init time and must be called from the mod's main scope
       (not from a function).
-    * Function only exists if Luanti server was built with cURL support.
+    * Function only exists if Wintercraft Reborn server was built with cURL support.
     * **DO NOT ALLOW ANY OTHER MODS TO ACCESS THE RETURNED TABLE, STORE IT IN
       A LOCAL VARIABLE!**
 * `HTTPApiTable.fetch(HTTPRequest req, callback)`
@@ -7998,7 +7998,7 @@ use the provided load and write functions for this.
     * `type_name`: optional, forces the internally used API.
         * Possible values: `"LibSpatial"` (default).
         * When other values are specified, or SpatialIndex is not available,
-          the custom Luanti functions are used.
+          the custom Wintercraft Reborn functions are used.
 * `get_area(id, include_corners, include_data)`
     * Returns the area information about the specified ID.
     * Returned values are either of these:
@@ -8936,7 +8936,7 @@ child will follow movement and rotation of that bone.
               at sunrise and sunset. (default: `#7f99cc`)
             * `fog_tint_type`: string, changes which mode the directional fog
                 abides by, `"custom"` uses `sun_tint` and `moon_tint`, while
-                `"default"` uses the classic Luanti sun and moon tinting.
+                `"default"` uses the classic Wintercraft Reborn sun and moon tinting.
                 Will use tonemaps, if set to `"default"`. (default: `"default"`)
         * `fog`: A table with following optional fields:
             * `fog_distance`: integer, set an upper bound for the client's viewing_range.
@@ -10670,7 +10670,7 @@ Parameters:
       `old_item` is the input item to replace (same syntax as for a regular input
       slot; groups are allowed) and `new_item` is an itemstring for the item stack
       it will become
-    * When the output is crafted, Luanti iterates through the list
+    * When the output is crafted, Wintercraft Reborn iterates through the list
       of input items if the crafting grid. For each input item stack, it checks if
       it matches with an `old_item` in the item pair list.
         * If it matches, the item will be replaced. Also, this item pair
@@ -11245,7 +11245,7 @@ See [Decoration types](#decoration-types). Used by `core.register_decoration`.
 
     schematic = "foobar.mts",
     -- If schematic is a string, it is the filepath relative to the current
-    -- working directory of the specified Luanti schematic file.
+    -- working directory of the specified Wintercraft Reborn schematic file.
     -- Could also be the ID of a previously registered schematic.
 
     schematic = {
@@ -12036,7 +12036,7 @@ Used by `HTTPApiTable.fetch` and `HTTPApiTable.fetch_async`.
     -- table as x-www-form-urlencoded key-value pairs.
 
     user_agent = "ExampleUserAgent",
-    -- Optional, if specified replaces the default Luanti user agent with
+    -- Optional, if specified replaces the default Wintercraft Reborn user agent with
     -- given string.
 
     extra_headers = { "Accept-Language: en-us", "Accept-Charset: utf-8" },
@@ -12134,7 +12134,7 @@ See http://bitop.luajit.org/ for advanced information.
 Tracy Profiler
 --------------
 
-Luanti can be built with support for the Tracy profiler, which can also be
+Wintercraft Reborn can be built with support for the Tracy profiler, which can also be
 useful for profiling mods and is exposed to Lua as the global `tracy`.
 
 See doc/developing/misc.md for details.
@@ -12144,7 +12144,7 @@ Note: This is a development feature and not covered by compatibility promises.
 Error Handling
 --------------
 
-When an error occurs that is not caught, Luanti calls the function
+When an error occurs that is not caught, Wintercraft Reborn calls the function
 `core.error_handler` with the error object as its first argument. The second
 argument is the stack level where the error occurred. The return value is the
 error string that should be shown. By default this is a backtrace from

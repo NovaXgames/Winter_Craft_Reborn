@@ -577,7 +577,7 @@ include_directories(SYSTEM
 	${GMP_INCLUDE_DIR}
 	${JSON_INCLUDE_DIR}
 	${LUA_BIT_INCLUDE_DIR}
-	# on Android, Luanti depends on SDL2 directly
+	# on Android, Wintercraft Reborn depends on SDL2 directly
 	# on other platforms, only IrrlichtMt depends on SDL2
 	"$<$<PLATFORM_ID:Android>:${SDL2_INCLUDE_DIRS}>"
 )
@@ -600,7 +600,7 @@ endif()
 
 # When cross-compiling place the executable in <build dir>/bin so that multiple
 # targets can be built from the same source folder. Otherwise, place it in
-# <source dir>/bin/ since Luanti can only run from there.
+# <source dir>/bin/ since Wintercraft Reborn can only run from there.
 if(CMAKE_CROSSCOMPILING)
 	set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin")
 else()
@@ -657,7 +657,7 @@ if(BUILD_CLIENT)
 			MACOSX_BUNDLE TRUE
 			MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
 			RESOURCE "${client_RESOURCES}"
-			XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "org.luanti.luanti"
+			XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "org.novaxgames.wintercraftreborn"
 			XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME "YES"
 			XCODE_ATTRIBUTE_INSTALL_PATH "/Applications"
 			XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
@@ -703,7 +703,7 @@ if(BUILD_CLIENT)
 		sha256
 		${FREETYPE_LIBRARY}
 		${PLATFORM_LIBS}
-		# on Android, Luanti depends on SDL2 directly
+		# on Android, Wintercraft Reborn depends on SDL2 directly
 		# on other platforms, only IrrlichtMt depends on SDL2
 		"$<$<PLATFORM_ID:Android>:${SDL2_LIBRARIES}>"
 	)

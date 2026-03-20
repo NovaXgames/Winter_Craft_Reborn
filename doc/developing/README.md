@@ -1,12 +1,12 @@
 # Developer documentation
 
-## Luanti Documentation
+## Wintercraft Reborn Documentation
 
 Some important development docs are found on the docs site: https://docs.luanti.org/
 
 Notable pages:
 
-- [Releasing Luanti](https://docs.luanti.org/for-engine-devs/releasing-luanti/)
+- [Releasing Wintercraft Reborn](https://docs.luanti.org/for-engine-devs/releasing-luanti/)
 - [Engine translations](https://docs.luanti.org/for-creators/translation/)
 - [Changelog](https://docs.luanti.org/about/changelog/)
 - [Organisation](https://docs.luanti.org/for-engine-devs/organization/)

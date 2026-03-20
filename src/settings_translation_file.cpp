@@ -130,7 +130,7 @@ fake_function() {
 	gettext("Interaction style");
 	gettext("The kind of digging/placing controls used.\n\n* Tap\nLong/short tap anywhere on the screen to interact.\nInteraction happens at finger position.\n\n* Tap with crosshair\nLong/short tap anywhere on the screen to interact.\nInteraction happens at crosshair position.\n\n* Buttons with crosshair\nUse dedicated dig/place buttons to interact.\nInteraction happens at crosshair position.");
 	gettext("Punch gesture");
-	gettext("The gesture for punching players/entities.\nThis can be overridden by games and mods.\n\n* Short tap\nEasy to use and well-known from other games that shall not be named.\n\n* Long tap\nKnown from the classic Luanti mobile controls.\nCombat is more or less impossible.");
+	gettext("The gesture for punching players/entities.\nThis can be overridden by games and mods.\n\n* Short tap\nEasy to use and well-known from other games that shall not be named.\n\n* Long tap\nKnown from the classic Wintercraft Reborn mobile controls.\nCombat is more or less impossible.");
 	gettext("Touchscreen sensitivity");
 	gettext("Touchscreen sensitivity multiplier.");
 	gettext("Movement threshold");
@@ -359,9 +359,9 @@ fake_function() {
 	gettext("ContentDB URL");
 	gettext("The URL for the content repository");
 	gettext("Enable updates available indicator on content tab");
-	gettext("If enabled and you have ContentDB packages installed, Luanti may contact ContentDB to\ncheck for package updates when opening the mainmenu.");
+	gettext("If enabled and you have ContentDB packages installed, Wintercraft Reborn may contact ContentDB to\ncheck for package updates when opening the mainmenu.");
 	gettext("ContentDB Flag Blacklist");
-	gettext("Comma-separated list of flags to hide in the content repository.\n\"nonfree\" can be used to hide packages which do not qualify as 'free software',\nas defined by the Free Software Foundation.\nYou can also specify content ratings.\nThese flags are independent from Luanti versions,\nso see a full list at https://content.luanti.org/help/content_flags/");
+	gettext("Comma-separated list of flags to hide in the content repository.\n\"nonfree\" can be used to hide packages which do not qualify as 'free software',\nas defined by the Free Software Foundation.\nYou can also specify content ratings.\nThese flags are independent from Wintercraft Reborn versions,\nso see a full list at https://content.luanti.org/help/content_flags/");
 	gettext("ContentDB Max Concurrent Downloads");
 	gettext("Maximum number of concurrent downloads. Downloads exceeding this limit will be queued.\nThis should be lower than curl_parallel_limit.");
 	gettext("Client and Server");
@@ -373,7 +373,7 @@ fake_function() {
 	gettext("Enable split login/register");
 	gettext("If enabled, server account registration is separate from login in the UI.\nIf disabled, connecting to a server will automatically register a new account.");
 	gettext("Update information URL");
-	gettext("URL to JSON file which provides information about the newest Luanti release.\nIf this is empty the engine will never check for updates.");
+	gettext("URL to JSON file which provides information about the newest Wintercraft Reborn release.\nIf this is empty the engine will never check for updates.");
 	gettext("Server");
 	gettext("Admin name");
 	gettext("Name of the player.\nWhen running a server, a client connecting with this name is admin.\nWhen starting from the main menu, this is overridden.");
@@ -761,7 +761,7 @@ fake_function() {
 	gettext("Mapblock mesh generation delay");
 	gettext("Delay between mesh updates on the client in ms. Increasing this will slow\ndown the rate of mesh updates, which can help reduce jitter.");
 	gettext("Mapblock mesh generation threads");
-	gettext("Number of threads to use for mesh generation.\nValue of 0 (default) will let Luanti automatically choose the number of threads.");
+	gettext("Number of threads to use for mesh generation.\nValue of 0 (default) will let Wintercraft Reborn automatically choose the number of threads.");
 	gettext("Minimum vertex count for mesh buffers");
 	gettext("All mesh buffers with less than this number of vertices will be merged\nduring map rendering. This improves rendering performance.");
 	gettext("Minimap scan height");
@@ -827,7 +827,7 @@ fake_function() {
 	gettext("IPv6");
 	gettext("Enable IPv6 support (for both client and server).\nRequired for IPv6 connections to work at all.");
 	gettext("Prometheus listener address");
-	gettext("Prometheus listener address.\nIf Luanti is compiled with Prometheus support, this setting\nenables the metrics listener for Prometheus on that address.\nBy default you can fetch metrics from http://127.0.0.1:30000/metrics.\nAn empty value disables the metrics listener.");
+	gettext("Prometheus listener address.\nIf Wintercraft Reborn is compiled with Prometheus support, this setting\nenables the metrics listener for Prometheus on that address.\nBy default you can fetch metrics from http://127.0.0.1:30000/metrics.\nAn empty value disables the metrics listener.");
 	gettext("Maximum size of the client's outgoing chat queue");
 	gettext("Maximum size of the client's outgoing chat queue.\n0 to disable queueing and -1 to make the queue size unlimited.");
 	gettext("Mapblock unload timeout");
@@ -933,7 +933,7 @@ fake_function() {
 	gettext("Display Density Scaling Factor");
 	gettext("Adjust the detected display density, used for scaling UI elements.");
 	gettext("Enable console window");
-	gettext("Windows systems only: Start Luanti with the command line window in the background.\nContains the same information as the file debug.txt (default name).");
+	gettext("Windows systems only: Start Wintercraft Reborn with the command line window in the background.\nContains the same information as the file debug.txt (default name).");
 	gettext("Max. clearobjects extra blocks");
 	gettext("Number of extra blocks that can be loaded by /clearobjects at once.\nThis is a trade-off between SQLite transaction overhead and\nmemory consumption (4096=100MB, as a rule of thumb).");
 	gettext("Map directory");

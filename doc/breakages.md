@@ -1,4 +1,4 @@
-# Luanti Major Breakages List
+# Wintercraft Reborn Major Breakages List
 
 This document contains a list of breaking changes to be made in the next major version.
 This list is largely advisory and items may be reevaluated once the time comes.
@@ -10,7 +10,7 @@ This list is largely advisory and items may be reevaluated once the time comes.
 * remove fog from `get/set_sky()` and introduce `get/set_fog()`
   * https://github.com/luanti-org/luanti/pull/16725#issuecomment-3622450532
 * `game.conf` name/id mess
-* remove `depends.txt` / `description.txt` (would simplify ContentDB and Luanti code a little)
+* remove `depends.txt` / `description.txt` (would simplify ContentDB and Wintercraft Reborn code a little)
 * rotate moon texture by 180°, making it coherent with the sun
   * https://github.com/luanti-org/luanti/pull/11902
 * remove undocumented `set_physics_override(num, num, num)`

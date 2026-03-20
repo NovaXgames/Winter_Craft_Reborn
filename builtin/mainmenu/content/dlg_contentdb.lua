@@ -1,11 +1,11 @@
--- Luanti
+-- Wintercraft Reborn
 -- Copyright (C) 2018-20 rubenwardy
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 
 if not core.get_http_api then
 	function create_contentdb_dlg()
 		return messagebox("contentdb",
-				fgettext("ContentDB is not available when Luanti was compiled without cURL"))
+				fgettext("ContentDB is not available when Wintercraft Reborn was compiled without cURL"))
 	end
 	return
 end

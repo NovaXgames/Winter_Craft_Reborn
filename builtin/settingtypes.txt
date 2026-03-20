@@ -381,7 +381,7 @@ touch_interaction_style (Interaction style) enum tap tap,tap_crosshair,buttons_c
 #      Easy to use and well-known from other games that shall not be named.
 #
 #    * Long tap
-#      Known from the classic Luanti mobile controls.
+#      Known from the classic Wintercraft Reborn mobile controls.
 #      Combat is more or less impossible.
 #
 #    Requires: touchscreen, touch_interaction_style_tap
@@ -934,7 +934,7 @@ chat_font_size (Chat font size) int 0 0 72
 #    The URL for the content repository
 contentdb_url (ContentDB URL) string https://content.luanti.org
 
-#    If enabled and you have ContentDB packages installed, Luanti may contact ContentDB to
+#    If enabled and you have ContentDB packages installed, Wintercraft Reborn may contact ContentDB to
 #    check for package updates when opening the mainmenu.
 contentdb_enable_updates_indicator (Enable updates available indicator on content tab) bool true
 
@@ -942,7 +942,7 @@ contentdb_enable_updates_indicator (Enable updates available indicator on conten
 #    "nonfree" can be used to hide packages which do not qualify as 'free software',
 #    as defined by the Free Software Foundation.
 #    You can also specify content ratings.
-#    These flags are independent from Luanti versions,
+#    These flags are independent from Wintercraft Reborn versions,
 #    so see a full list at https://content.luanti.org/help/content_flags/
 contentdb_flag_blacklist (ContentDB Flag Blacklist) string nonfree, desktop_default
 
@@ -965,7 +965,7 @@ serverlist_url (Serverlist URL) [common] string https://servers.luanti.org
 #    If disabled, connecting to a server will automatically register a new account.
 enable_split_login_register (Enable split login/register) bool true
 
-#    URL to JSON file which provides information about the newest Luanti release.
+#    URL to JSON file which provides information about the newest Wintercraft Reborn release.
 #    If this is empty the engine will never check for updates.
 update_information_url (Update information URL) string https://www.luanti.org/release_info.json
 
@@ -979,7 +979,7 @@ name (Admin name) string
 [**Serverlist and MOTD]
 
 #    Name of the server, to be displayed when players join and in the serverlist.
-server_name (Server name) string Luanti server
+server_name (Server name) string Wintercraft Reborn server
 
 #    Description of server, to be displayed when players join and in the serverlist.
 server_description (Server description) string mine here
@@ -1026,7 +1026,7 @@ strict_protocol_version_checking (Strict protocol checking) bool false
 #    Older clients are compatible in the sense that they will not crash when connecting
 #    to new servers, but they may not support all new features that you are expecting.
 #    This allows for more fine-grained control than strict_protocol_version_checking.
-#    Luanti still enforces its own internal minimum, and enabling
+#    Wintercraft Reborn still enforces its own internal minimum, and enabling
 #    strict_protocol_version_checking will effectively override this.
 protocol_version_min (Protocol version minimum) int 1 1 65535
 
@@ -2034,7 +2034,7 @@ cloud_radius (Cloud radius) int 12 8 62
 mesh_generation_interval (Mapblock mesh generation delay) int 0 0 25
 
 #    Number of threads to use for mesh generation.
-#    Value of 0 (default) will let Luanti automatically choose the number of threads.
+#    Value of 0 (default) will let Wintercraft Reborn automatically choose the number of threads.
 mesh_generation_threads (Mapblock mesh generation threads) int 0 0 8
 
 #    All mesh buffers with less than this number of vertices will be merged
@@ -2196,7 +2196,7 @@ lighting_boost_spread (Light curve boost spread) float 0.2 0.0 0.4
 enable_ipv6 (IPv6) [common] bool true
 
 #    Prometheus listener address.
-#    If Luanti is compiled with Prometheus support, this setting
+#    If Wintercraft Reborn is compiled with Prometheus support, this setting
 #    enables the metrics listener for Prometheus on that address.
 #    By default you can fetch metrics from http://127.0.0.1:30000/metrics.
 #    An empty value disables the metrics listener.
@@ -2427,7 +2427,7 @@ ignore_world_load_errors (Ignore world errors) [server] bool false
 #    Adjust the detected display density, used for scaling UI elements.
 display_density_factor (Display Density Scaling Factor) [client] float 1 0.5 5.0
 
-#    Windows systems only: Start Luanti with the command line window in the background.
+#    Windows systems only: Start Wintercraft Reborn with the command line window in the background.
 #    Contains the same information as the file debug.txt (default name).
 enable_console (Enable console window) [common] bool false
 
