@@ -119,6 +119,9 @@ end
 -- }]]
 function dump(value, indent)
 	indent = indent or "\t"
+
+	assert(type(indent) == "string", "dump()'s second argument should be a string or nil.")
+
 	local newline = indent == "" and "" or "\n"
 
 	local rope = {}
@@ -658,7 +661,7 @@ function core.colorize(color, message)
 		lines[i] = color_code .. line
 	end
 
-	return table.concat(lines, "\n") .. core.get_color_escape_sequence("#ffffff")
+	return table.concat(lines, "\n") .. core.get_color_escape_sequence("#fff")
 end
 
 
@@ -673,6 +676,7 @@ end
 function core.strip_colors(str)
 	return (str:gsub(ESCAPE_CHAR .. "%([bc]@[^)]+%)", ""))
 end
+
 
 local function translate(textdomain, str, num, ...)
 	local start_seq
@@ -872,3 +876,4 @@ function core.parse_coordinates(x, y, z, relative_to)
 	local rz = core.parse_relative_number(z, relative_to.z)
 	return rx and ry and rz and vector.new(rx, ry, rz)
 end
+

@@ -435,7 +435,7 @@ function core.do_item_eat(hp_change, replace_with_item, itemstack, user, pointed
 		core.add_item(pos, replace_with_item)
 	end
 
-	user:set_hp(user:get_hp() + hp_change)
+	user:set_hp(user:get_hp() + hp_change, {type="set_hp", custom_type="__builtin:item_eat"})
 
 	return nil -- don't overwrite wield item a second time
 end
@@ -568,6 +568,26 @@ function core.node_dig(pos, node, digger)
 			pos = pos,
 			exclude_player = diggername,
 		}, true)
+	end
+	-- Particles also
+	if diggername ~= "" and def and def.drawtype ~= "airlike" then
+		-- cf. ParticleManager::addDiggingParticles() et al
+		local gravity = tonumber(core.settings:get("movement_gravity")) or 9.81
+		core.add_particlespawner({
+			amount = 16,
+			time = 0.001,
+			minpos = vector.offset(pos, -0.25, -0.25, -0.25),
+			maxpos = vector.offset(pos, 0.25, 0.25, 0.25),
+			minvel = vector.new(-1.5, 0, -1.5),
+			maxvel = vector.new(1.5, 3, 1.5),
+			minacc = vector.new(0, -gravity, 0),
+			maxacc = vector.new(0, -gravity, 0),
+			minexptime = 0, maxexptime = 1,
+			minsize = 0, maxsize = 0, -- random
+			node = node,
+			blend = (def and def.use_texture_alpha == "blend") and "blend" or "clip",
+			exclude_player = diggername,
+		})
 	end
 
 	-- Run callback

@@ -103,24 +103,19 @@ public:
 		GL.TexParameteri(TextureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		GL.TexParameteri(TextureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		if (HasMipMaps) {
-			if (Driver->getTextureCreationFlag(ETCF_OPTIMIZED_FOR_SPEED))
-				GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_FASTEST);
-			else if (Driver->getTextureCreationFlag(ETCF_OPTIMIZED_FOR_QUALITY))
-				GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-			else
-				GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_DONT_CARE);
-		}
 		TEST_GL_ERROR(Driver);
 
 		initTexture(tmpImages->size());
 
-		for (size_t i = 0; i < tmpImages->size(); ++i)
-			uploadTexture(i, 0, (*tmpImages)[i]->getData());
+		if (Type == ETT_2D_ARRAY) {
+			upload2DArrayTexture(tmpImages->size(), tmpImages->data());
+		} else {
+			for (size_t i = 0; i < tmpImages->size(); ++i)
+				uploadTexture(i, 0, (*tmpImages)[i]->getData());
+		}
 
 		if (HasMipMaps) {
-			for (size_t i = 0; i < tmpImages->size(); ++i)
-				regenerateMipMapLevels(i);
+			regenerateMipMapLevels();
 		}
 
 		if (!KeepImage) {
@@ -147,7 +142,7 @@ public:
 		DriverType = Driver->getDriverType();
 		assert(Type != ETT_2D_ARRAY); // not supported by this constructor
 		TextureType = TextureTypeIrrToGL(Type);
-		HasMipMaps = false;
+		HasMipMaps = Driver->getTextureCreationFlag(ETCF_CREATE_RTT_MIP_MAPS);
 		IsRenderTarget = true;
 
 		if (!name.empty())
@@ -156,7 +151,7 @@ public:
 		OriginalColorFormat = format;
 
 		if (ECF_UNKNOWN == OriginalColorFormat)
-			ColorFormat = getBestColorFormat(Driver->getColorFormat());
+			ColorFormat = getBestColorFormat(video::ECF_A8R8G8B8);
 		else
 			ColorFormat = OriginalColorFormat;
 
@@ -164,7 +159,7 @@ public:
 		Size = OriginalSize;
 
 		if (core::min_(Size.Width, Size.Height) == 0 || core::max_(Size.Width, Size.Height) > Driver->MaxTextureSize) {
-			char buf[64];
+			char buf[32];
 			snprintf_irr(buf, sizeof(buf), "%dx%d", Size.Width, Size.Height);
 			os::Printer::log("Invalid size for render target", buf, ELL_ERROR);
 			return;
@@ -187,10 +182,11 @@ public:
 		}
 #endif
 
-		char lbuf[100];
+		char lbuf[200];
 		snprintf_irr(lbuf, sizeof(lbuf),
-			"COpenGLCoreTexture: RTT Type = %d Size = %dx%d (S:%d) ColorFormat = %s -> %#06x %#06x %#06x%s",
+			"COpenGLCoreTexture: RTT Type = %d Size = %dx%d (S:%d) ColorFormat = %s%s -> %#06x %#06x %#06x%s",
 			(int)Type, Size.Width, Size.Height, (int)MSAA, ColorFormatName(ColorFormat),
+			HasMipMaps ? " +Mip" : "",
 			InternalFormat, PixelFormat, PixelType, Converter ? " (c)" : ""
 		);
 		os::Printer::log(lbuf, ELL_DEBUG);
@@ -392,18 +388,26 @@ public:
 		LockLayer = 0;
 	}
 
-	void regenerateMipMapLevels(u32 layer = 0) override
+	void regenerateMipMapLevels() override
 	{
 		if (!HasMipMaps || (Size.Width <= 1 && Size.Height <= 1))
 			return;
 
-		const COpenGLCoreTexture *prevTexture = Driver->getCacheHandler()->getTextureCache().get(0);
-		Driver->getCacheHandler()->getTextureCache().set(0, this);
+		auto &cache = Driver->getCacheHandler()->getTextureCache();
+		const COpenGLCoreTexture *prevTexture = cache.get(0);
+		cache.set(0, this);
+
+		if (Driver->getTextureCreationFlag(ETCF_OPTIMIZED_FOR_SPEED))
+			GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_FASTEST);
+		else if (Driver->getTextureCreationFlag(ETCF_OPTIMIZED_FOR_QUALITY))
+			GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+		else
+			GL.Hint(GL_GENERATE_MIPMAP_HINT, GL_DONT_CARE);
 
 		Driver->irrGlGenerateMipmap(TextureType);
 		TEST_GL_ERROR(Driver);
 
-		Driver->getCacheHandler()->getTextureCache().set(0, prevTexture);
+		cache.set(0, prevTexture);
 	}
 
 	GLenum getOpenGLTextureType() const
@@ -484,7 +488,7 @@ protected:
 		Size = OriginalSize;
 
 		if (Size.Width == 0 || Size.Height == 0) {
-			char buf[64];
+			char buf[32];
 			snprintf_irr(buf, sizeof(buf), "%dx%d", Size.Width, Size.Height);
 			os::Printer::log("Invalid size of image for texture", buf, ELL_ERROR);
 			return;
@@ -664,6 +668,56 @@ protected:
 			}
 			TEST_GL_ERROR(Driver);
 		}
+	}
+
+	void upload2DArrayTexture(const u32 layers, video::IImage *const *images)
+	{
+		if (!layers)
+			return;
+		assert(images);
+
+		const u32 width = Size.Width, height = Size.Height;
+
+		assert(!IImage::isCompressedFormat(ColorFormat));
+		assert(TextureType == GL_TEXTURE_2D_ARRAY);
+
+		const u32 imageBytes = IImage::getDataSizeFromFormat(ColorFormat, width, height);
+		constexpr u32 MAX_TMP_BUFFER = 16 * 1024 * 1024;
+
+		// Uploading small textures layer-by-layer can apparently be very slow.
+		// Maybe a PBO would be cleaner here but copying to a temporary buffer
+		// isn't too bad.
+		std::vector<u8> tmpBuffer;
+		tmpBuffer.reserve(core::min_(imageBytes * layers, MAX_TMP_BUFFER));
+		u32 layerOffset = 0;
+		const auto &uploadMultiple = [&] () {
+			assert(tmpBuffer.size() % imageBytes == 0);
+			size_t curLayers = tmpBuffer.size() / imageBytes;
+			assert(curLayers > 0);
+			GL.TexSubImage3D(TextureType, 0, 0, 0, layerOffset, width, height, curLayers, PixelFormat, PixelType, tmpBuffer.data());
+			layerOffset += curLayers;
+			tmpBuffer.clear();
+		};
+		CImage *tmpImage = nullptr;
+		for (u32 i = 0; i < layers; i++) {
+			u8 *data;
+			if (Converter) {
+				// this may look redundant but CImage does special alignment
+				if (!tmpImage)
+					tmpImage = new CImage(ColorFormat, {width, height});
+				data = reinterpret_cast<u8*>(tmpImage->getData());
+				Converter(images[i]->getData(), width * height, data);
+			} else {
+				data = reinterpret_cast<u8*>(images[i]->getData());
+			}
+			tmpBuffer.insert(tmpBuffer.end(), data, data + imageBytes);
+			if (tmpBuffer.size() >= MAX_TMP_BUFFER)
+				uploadMultiple();
+		}
+		delete tmpImage;
+		if (!tmpBuffer.empty())
+			uploadMultiple();
+		assert(layerOffset == layers);
 	}
 
 	GLenum TextureTypeIrrToGL(E_TEXTURE_TYPE type) const

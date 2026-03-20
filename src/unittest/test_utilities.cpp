@@ -50,6 +50,7 @@ public:
 	void testSanitizeUntrusted();
 	void testReadSeed();
 	void testMyDoubleStringConversions();
+	void testGetMemorySize();
 };
 
 static TestUtilities g_test_instance;
@@ -87,6 +88,7 @@ void TestUtilities::runTests(IGameDef *gamedef)
 	TEST(testSanitizeUntrusted);
 	TEST(testReadSeed);
 	TEST(testMyDoubleStringConversions);
+	TEST(testGetMemorySize);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -335,6 +337,8 @@ void TestUtilities::testRemoveEscapes()
 		L"abc\x1b(escaped)def") == L"abcdef");
 	UASSERT(unescape_enriched<wchar_t>(
 		L"abc\x1b((escaped with parenthesis\\))def") == L"abcdef");
+	UASSERTEQ(auto, unescape_enriched("abc\x1b(not this\\\\)def"),
+		"abcdef");
 	UASSERT(unescape_enriched<wchar_t>(
 		L"abc\x1b(incomplete") == L"abc");
 	UASSERT(unescape_enriched<wchar_t>(
@@ -342,6 +346,9 @@ void TestUtilities::testRemoveEscapes()
 	// Nested escapes not supported
 	UASSERT(unescape_enriched<wchar_t>(
 		L"abc\x1b(outer \x1b(inner escape)escape)def") == L"abcescape)def");
+	// Multiple
+	UASSERTEQ(auto, unescape_enriched("one\x1bX two \x1b(four)three"),
+		"one two three");
 }
 
 void TestUtilities::testWrapRows()
@@ -799,4 +806,24 @@ void TestUtilities::testMyDoubleStringConversions()
 	test_round_trip(-std::numeric_limits<double>::infinity());
 	test_round_trip(0.3);
 	test_round_trip(0.1 + 0.2);
+}
+
+void TestUtilities::testGetMemorySize()
+{
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
+	const bool fail_ok = false;
+#else
+	const bool fail_ok = true;
+#endif
+
+	u32 total = porting::getMemorySizeMB();
+	UASSERT(total != 0 || fail_ok);
+	if (total != 0) {
+		infostream << "memory size in MB = " << total << std::endl;
+		// should be a sane value
+		UASSERTCMP(u32, >=, total, 130);
+		UASSERTCMP(u32, <, total, 8 * 1024 * 1024);
+	} else {
+		warningstream << "testGetMemorySize: retrieving failed" << std::endl;
+	}
 }

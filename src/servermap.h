@@ -66,7 +66,8 @@ public:
 	/// @brief write data back to map after mapgen
 	/// @param now current game time
 	void finishBlockMake(BlockMakeData *data,
-		std::map<v3s16, MapBlock*> *changed_blocks, u32 now);
+		std::map<v3s16, MapBlock*> *changed_blocks, ServerEnvironment *env);
+	void cancelBlockMake(BlockMakeData *data);
 
 	/*
 		Get a block from somewhere.
@@ -101,6 +102,7 @@ public:
 	/*
 		Database functions
 	*/
+	static std::vector<std::string> getDatabaseBackends();
 	static MapDatabase *createDatabase(const std::string &name, const std::string &savedir, Settings &conf);
 
 	// Call these before and after saving of blocks
@@ -156,7 +158,8 @@ public:
 
 	void transformLiquids(std::map<v3s16, MapBlock*> & modified_blocks,
 			ServerEnvironment *env);
-
+	void transformLiquidsLocal(std::map<v3s16, MapBlock*> &modified_blocks, UniqueQueue<v3s16> &liquid_queue,
+			ServerEnvironment *env, u32 liquid_loop_max);
 	void transforming_liquid_add(v3s16 p);
 
 	MapSettingsManager settings_mgr;
@@ -167,6 +170,9 @@ protected:
 
 private:
 	friend class ModApiMapgen; // for m_transforming_liquid
+
+	// extra border area during mapgen (in blocks)
+	constexpr static v3s16 EMERGE_EXTRA_BORDER{1, 1, 1};
 
 	// Emerge manager
 	EmergeManager *m_emerge;

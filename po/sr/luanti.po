@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luanti\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 19:59+0200\n"
-"PO-Revision-Date: 2025-07-10 03:05+0000\n"
-"Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
+"POT-Creation-Date: 2026-01-06 23:13+0100\n"
+"PO-Revision-Date: 2026-01-16 15:01+0000\n"
+"Last-Translator: Wuzzy <Wuzzy@disroot.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/minetest/"
 "minetest/sr/>\n"
 "Language: sr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: builtin/client/chatcommands.lua
 msgid "Clear the out chat queue"
@@ -85,6 +85,11 @@ msgid "[all | <cmd>] [-t]"
 msgstr "[all | <cmd>] [-t]"
 
 #: builtin/common/settings/components.lua
+#, fuzzy
+msgid "Add keybinding"
+msgstr "Пречице"
+
+#: builtin/common/settings/components.lua
 msgid "Browse"
 msgstr "Разгледај"
 
@@ -113,6 +118,11 @@ msgid "Set"
 msgstr "Постави"
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
+#, fuzzy
+msgid "$1 spread"
+msgstr "прошири х"
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
 msgid "(No description of setting given)"
 msgstr "(Није дат опис поставке)"
 
@@ -121,9 +131,21 @@ msgid "2D Noise"
 msgstr "2д шум"
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"2D noise: flag on.\n"
+"3D noise: flag off."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Amplifies every octave by (amplitude of the previous octave * Persistence)."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
 #: builtin/mainmenu/content/dlg_install.lua
 #: builtin/mainmenu/content/dlg_overwrite.lua
-#: builtin/mainmenu/dlg_config_world.lua builtin/mainmenu/dlg_create_world.lua
+#: builtin/mainmenu/dlg_config_world.lua builtin/mainmenu/dlg_confirm_exit.lua
+#: builtin/mainmenu/dlg_create_world.lua
 #: builtin/mainmenu/dlg_delete_content.lua
 #: builtin/mainmenu/dlg_delete_world.lua builtin/mainmenu/dlg_register.lua
 #: builtin/mainmenu/dlg_rename_modpack.lua src/gui/guiOpenURL.cpp
@@ -132,8 +154,58 @@ msgid "Cancel"
 msgstr "Поништи"
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Controls how many octaves (layers) the noise will have."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Each octave is a simple noise generator. Each one also adds more detail to "
+"the noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Finally, all of the octaves will be combined to generate the noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Having lots of octaves is not recommended because it increases terrain "
+"generation time."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
 msgid "Lacunarity"
 msgstr "Зјапљење"
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Lower values make the terrain simple and higher values make the terrain "
+"rough."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Lower values make the terrain smooth and higher values make the terrain have "
+"fine detail."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Lower values will result in smoother noise and higher values will result in "
+"rougher noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Making 3D noise eased is not recommended because it significantly increases "
+"the load."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"Maps noise gradient values onto a quintic S-curve before performing "
+"interpolation."
+msgstr ""
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
 msgid "Octaves"
@@ -143,6 +215,14 @@ msgstr "Октаве"
 #: src/settings_translation_file.cpp
 msgid "Offset"
 msgstr "Померај"
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Offsets the final noise by this value."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Overrides the 'eased' flag based on the noise type."
+msgstr ""
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
 msgid "Persistence"
@@ -159,21 +239,52 @@ msgid "Scale"
 msgstr "Размеравај"
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Scales every octave by (scale of the previous octave / Lacunarity)."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "Scales the noise in the $1 axis by this value."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
 #: builtin/mainmenu/dlg_create_world.lua
 msgid "Seed"
 msgstr "Семе"
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
-msgid "X spread"
-msgstr "прошири х"
+msgid "Takes the absolute value of each octave while adding them together."
+msgstr ""
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
-msgid "Y spread"
-msgstr "прошири у"
+msgid "The first octave is amplified by 1."
+msgstr ""
 
 #: builtin/common/settings/dlg_change_mapgen_flags.lua
-msgid "Z spread"
-msgstr "прошири z"
+#, fuzzy
+msgid "The first octave is scaled by 1."
+msgstr "Служитељ онемогућује ову наредбу."
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "The multiplier for the noise before the offset is added."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "The random seed for the noise. The same seed results in the same noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid ""
+"This is also the scale of the largest structures in the $1 direction of the "
+"noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "This results in smooth noise instead of gridlike noise."
+msgstr ""
+
+#: builtin/common/settings/dlg_change_mapgen_flags.lua
+msgid "This results in spiky noise."
+msgstr ""
 
 #. ~ "absvalue" is a noise parameter flag.
 #. It is short for "absolute value".
@@ -271,6 +382,12 @@ msgstr "Кретање"
 msgid "No results"
 msgstr "Нема налаза"
 
+#. ~ Indicates that the action does not have a corresponding keybinding.
+#: builtin/common/settings/dlg_settings.lua
+#, fuzzy
+msgid "Not bound"
+msgstr "Није пронађено"
+
 #: builtin/common/settings/dlg_settings.lua
 msgid "Reset setting to default"
 msgstr "Врати поставке на подразумеване"
@@ -304,8 +421,19 @@ msgid "Tap with crosshair"
 msgstr "Тапни мушицом"
 
 #: builtin/common/settings/dlg_settings.lua
+msgid ""
+"These settings are unavailable due to your platform, hardware or in "
+"combination with the current settings."
+msgstr ""
+
+#: builtin/common/settings/dlg_settings.lua
 msgid "Touchscreen layout"
 msgstr "Распоред додирног заслона"
+
+#: builtin/common/settings/dlg_settings.lua
+#, fuzzy
+msgid "Unavailable"
+msgstr "<нема доступних>"
 
 #: builtin/common/settings/settingtypes.lua
 msgid "Client Mods"
@@ -328,11 +456,6 @@ msgid "Custom"
 msgstr "Прилагођено"
 
 #: builtin/common/settings/shadows_component.lua
-#: src/settings_translation_file.cpp
-msgid "Dynamic shadows"
-msgstr "Покретне сене"
-
-#: builtin/common/settings/shadows_component.lua
 msgid "High"
 msgstr "Висока"
 
@@ -343,6 +466,10 @@ msgstr "Ниска"
 #: builtin/common/settings/shadows_component.lua
 msgid "Medium"
 msgstr "Средње"
+
+#: builtin/common/settings/shadows_component.lua
+msgid "Quality preset"
+msgstr ""
 
 #: builtin/common/settings/shadows_component.lua
 msgid "Very High"
@@ -650,6 +777,11 @@ msgstr "Нисам успео да уградим $1 као $2"
 msgid "Unable to install a $1 as a texture pack"
 msgstr "Нисам успео да уградим $1 као омот ткања"
 
+#: builtin/mainmenu/content/pkgmgr.lua
+#, fuzzy
+msgid "World mods"
+msgstr "Име света"
+
 #: builtin/mainmenu/dlg_clients_list.lua
 msgid ""
 "Players connected to\n"
@@ -699,6 +831,10 @@ msgid "Mod:"
 msgstr "Измена:"
 
 #: builtin/mainmenu/dlg_config_world.lua
+msgid "Mods located inside the world folder."
+msgstr ""
+
+#: builtin/mainmenu/dlg_config_world.lua
 msgid "No (optional) dependencies"
 msgstr "Нема (додатних) зависности"
 
@@ -729,6 +865,19 @@ msgstr "Свет:"
 #: builtin/mainmenu/dlg_config_world.lua
 msgid "enabled"
 msgstr "омогућен"
+
+#: builtin/mainmenu/dlg_confirm_exit.lua
+msgid "Always show this dialog."
+msgstr ""
+
+#: builtin/mainmenu/dlg_confirm_exit.lua
+#, fuzzy
+msgid "Are you sure you want to quit?"
+msgstr "Да ли заиста желите да избришете „$1“?"
+
+#: builtin/mainmenu/dlg_confirm_exit.lua
+msgid "Quit"
+msgstr ""
 
 #: builtin/mainmenu/dlg_create_world.lua
 msgid "A world named \"$1\" already exists"
@@ -1085,6 +1234,10 @@ msgstr "Никада"
 msgid "Visit website"
 msgstr "Посетите страницу веба"
 
+#: builtin/mainmenu/init.lua
+msgid "Debug build, expect worse performance"
+msgstr ""
+
 #: builtin/mainmenu/init.lua src/client/game_formspec.cpp
 msgid "Settings"
 msgstr "Поставке"
@@ -1237,10 +1390,6 @@ msgid "New"
 msgstr "Нови"
 
 #: builtin/mainmenu/tab_local.lua
-msgid "No world created or selected!"
-msgstr "Нема створених или одабраних светова!"
-
-#: builtin/mainmenu/tab_local.lua
 msgid "Play Game"
 msgstr "Играј игру"
 
@@ -1326,6 +1475,7 @@ msgstr ""
 "$1"
 
 #: builtin/mainmenu/tab_online.lua
+#, fuzzy
 msgid ""
 "Possible filters\n"
 "game:<name>\n"
@@ -1333,9 +1483,9 @@ msgid ""
 "player:<name>"
 msgstr ""
 "Могући услови\n"
-"игра:<name>\n"
-"измена:<name>\n"
-"играч:<name>"
+"game:<name>\n"
+"mod:<name>\n"
+"player:<name>"
 
 #: builtin/mainmenu/tab_online.lua
 msgid "Public Servers"
@@ -1366,11 +1516,6 @@ msgid "Done!"
 msgstr "Готово!"
 
 #: src/client/client.cpp
-#, c-format
-msgid "Failed to save screenshot to \"%s\""
-msgstr ""
-
-#: src/client/client.cpp
 msgid "Initializing nodes"
 msgstr "Покрећем чворове"
 
@@ -1386,10 +1531,10 @@ msgstr "Учитавам ткања..."
 msgid "Rebuilding shaders..."
 msgstr "Преобликујем сенчење..."
 
-#: src/client/client.cpp
-#, fuzzy, c-format
+#: src/client/client.cpp src/util/screenshot.cpp
+#, c-format
 msgid "Saved screenshot to \"%s\""
-msgstr "Снимци радне површи"
+msgstr "Слика радне површи је сачувана у „%s“"
 
 #: src/client/clientlauncher.cpp
 msgid "Could not find or load game: "
@@ -1416,14 +1561,15 @@ msgid "Provided password file failed to open: "
 msgstr "Нисам успео да отворим достављену датотеку лозинке: "
 
 #: src/client/clientlauncher.cpp
-msgid "Provided world path doesn't exist: "
-msgstr "Достављена путања света не постоји: "
+msgid "World does not exist and no game selected to create one."
+msgstr ""
 
 #: src/client/clientmedia.cpp src/client/game.cpp
 msgid "Media..."
 msgstr "Носач..."
 
-#: src/client/game.cpp src/client/shader.cpp src/server.cpp
+#: src/client/game.cpp src/client/render/pipeline.cpp src/client/shader.cpp
+#: src/server.cpp
 msgid ""
 "\n"
 "Check debug.txt for details."
@@ -1845,10 +1991,6 @@ msgid "Profiler shown (page %d of %d)"
 msgstr "Приказан је профилер (страна %d од %d)"
 
 #: src/client/keycode.cpp
-msgid "Apps"
-msgstr "Програми"
-
-#: src/client/keycode.cpp
 msgid "Backspace"
 msgstr "Пребриши"
 
@@ -1878,44 +2020,19 @@ msgid "Down Arrow"
 msgstr "Стрелица доле"
 
 #: src/client/keycode.cpp
-msgid "End"
-msgstr "Kraj"
+#, fuzzy
+msgid "End Key"
+msgstr "Дугме изборника"
 
 #: src/client/keycode.cpp
-msgid "Erase EOF"
-msgstr "Избирши ЕОФ"
+#, fuzzy
+msgid "Help Key"
+msgstr "Дугме бриши"
 
 #: src/client/keycode.cpp
-msgid "Execute"
-msgstr "Изврши"
-
-#: src/client/keycode.cpp
-msgid "Help"
-msgstr "Помоћ"
-
-#: src/client/keycode.cpp
-msgid "Home"
-msgstr "Матица"
-
-#: src/client/keycode.cpp
-msgid "IME Accept"
-msgstr "ИМЕ Прихвати"
-
-#: src/client/keycode.cpp
-msgid "IME Convert"
-msgstr "ИМЕ Претвори"
-
-#: src/client/keycode.cpp
-msgid "IME Escape"
-msgstr "ИМЕ Излаз"
-
-#: src/client/keycode.cpp
-msgid "IME Mode Change"
-msgstr "ИМЕ Измена измене"
-
-#: src/client/keycode.cpp
-msgid "IME Nonconvert"
-msgstr "ИМЕ Непретвори"
+#, fuzzy
+msgid "Home Key"
+msgstr "Дугме приближавања"
 
 #: src/client/keycode.cpp
 msgid "Insert"
@@ -1926,8 +2043,9 @@ msgid "Left Arrow"
 msgstr "Стрелица лево"
 
 #: src/client/keycode.cpp
-msgid "Left Button"
-msgstr "Лево дугме"
+#, fuzzy
+msgid "Left Click"
+msgstr "Леви управљач"
 
 #: src/client/keycode.cpp
 msgid "Left Control"
@@ -1941,18 +2059,26 @@ msgstr "Леви изборник"
 msgid "Left Shift"
 msgstr "Леви помак"
 
+#. ~ Name of key
 #: src/client/keycode.cpp
 msgid "Left Windows"
 msgstr "Леви прозор"
 
-#. ~ Key name, common on Windows keyboards
 #: src/client/keycode.cpp
 msgid "Menu Key"
 msgstr "Дугме изборника"
 
 #: src/client/keycode.cpp
-msgid "Middle Button"
-msgstr "Средње дугме"
+msgid "Middle Click"
+msgstr ""
+
+#: src/client/keycode.cpp
+msgid "Mouse X1"
+msgstr ""
+
+#: src/client/keycode.cpp
+msgid "Mouse X2"
+msgstr ""
 
 #: src/client/keycode.cpp
 msgid "Num Lock"
@@ -2019,10 +2145,6 @@ msgid "Numpad 9"
 msgstr "Бројчано дугме 9"
 
 #: src/client/keycode.cpp
-msgid "OEM Clear"
-msgstr "Очисти ЕОФ"
-
-#: src/client/keycode.cpp
 msgid "Page Down"
 msgstr "Страница доле"
 
@@ -2053,8 +2175,9 @@ msgid "Right Arrow"
 msgstr "Стрелица десно"
 
 #: src/client/keycode.cpp
-msgid "Right Button"
-msgstr "Десно дугме"
+#, fuzzy
+msgid "Right Click"
+msgstr "Десни управљач"
 
 #: src/client/keycode.cpp
 msgid "Right Control"
@@ -2068,54 +2191,41 @@ msgstr "Десни изборник"
 msgid "Right Shift"
 msgstr "Десни помак"
 
+#. ~ Name of key
 #: src/client/keycode.cpp
 msgid "Right Windows"
 msgstr "Десни прозор"
 
 #: src/client/keycode.cpp
+#, c-format
+msgid "Scancode: %d"
+msgstr ""
+
+#: src/client/keycode.cpp
 msgid "Scroll Lock"
 msgstr "Закључавање клизања"
 
-#. ~ Key name
 #: src/client/keycode.cpp
-msgid "Select"
-msgstr "Означи"
+#, fuzzy
+msgid "Select Key"
+msgstr "Дугме бриши"
 
 #: src/client/keycode.cpp
 msgid "Shift Key"
 msgstr "Дугме помак"
 
 #: src/client/keycode.cpp
-msgid "Sleep"
-msgstr "Спавање"
-
-#: src/client/keycode.cpp
-msgid "Snapshot"
-msgstr "Снимак"
-
-#: src/client/keycode.cpp
 msgid "Space"
 msgstr "Размак"
 
 #: src/client/keycode.cpp
-msgid "Tab"
-msgstr "Лист"
+#, fuzzy
+msgid "Tab Key"
+msgstr "Дугме прелома"
 
 #: src/client/keycode.cpp
 msgid "Up Arrow"
 msgstr "Стрелица навише"
-
-#: src/client/keycode.cpp
-msgid "X Button 1"
-msgstr "Х дугме 1"
-
-#: src/client/keycode.cpp
-msgid "X Button 2"
-msgstr "Х дугме 2"
-
-#: src/client/keycode.cpp
-msgid "Zoom Key"
-msgstr "Дугме приближавања"
 
 #: src/client/minimap.cpp
 msgid "Minimap hidden"
@@ -2135,9 +2245,19 @@ msgstr "Мала карта у приказу површи, приближава
 msgid "Minimap in texture mode"
 msgstr "Мала карта у приказу ткања"
 
+#: src/client/render/pipeline.cpp
+#, c-format
+msgid "Failed to create the texture \"%s\" for the rendering pipeline."
+msgstr ""
+
 #: src/client/shader.cpp
 #, c-format
 msgid "Failed to compile the \"%s\" shader."
+msgstr "Нисам успео да преведем сенченка „%s“."
+
+#: src/client/shader.cpp
+#, fuzzy, c-format
+msgid "Failed to find \"%s\" shader files."
 msgstr "Нисам успео да преведем сенченка „%s“."
 
 #: src/client/shader.cpp
@@ -2353,7 +2473,7 @@ msgstr "Неисправна лозинка"
 #: src/network/clientpackethandler.cpp src/script/lua_api/l_client.cpp
 #: src/script/lua_api/l_mainmenu.cpp
 msgid "LANG_CODE"
-msgstr "LANG_CODE"
+msgstr "sr"
 
 #: src/network/clientpackethandler.cpp
 msgid ""
@@ -2522,12 +2642,11 @@ msgstr ""
 msgid ""
 "3D support.\n"
 "Currently supported:\n"
-"-    none: no 3d output.\n"
-"-    anaglyph: cyan/magenta color 3d.\n"
-"-    interlaced: odd/even line based polarization screen support.\n"
-"-    topbottom: split screen top/bottom.\n"
-"-    sidebyside: split screen side by side.\n"
-"-    crossview: Cross-eyed 3d"
+"-    none: no 3D output\n"
+"-    anaglyph: cyan/magenta color 3D\n"
+"-    topbottom: split screen top/bottom\n"
+"-    sidebyside: split screen side-by-side\n"
+"-    crossview: cross-eyed 3D"
 msgstr ""
 "3Д подршка.\n"
 "Тренутно су подржани:\n"
@@ -2608,7 +2727,6 @@ msgid "Admin name"
 msgstr "Име руковаоца"
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Advanced"
 msgstr "Напредно"
 
@@ -2627,14 +2745,12 @@ msgid "Allows liquids to be translucent."
 msgstr "Омогућава течностима да буду прозирне."
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid ""
 "Also used for climbing down and descending in water if aux1_descends is "
 "disabled."
 msgstr ""
-"Дугме за шуњање.\n"
 "Такође се користи за силазак и спуштање у воду уколико је онемогућено дугме "
-"спољње1_силазак."
+"aux1_descend."
 
 #: src/settings_translation_file.cpp
 msgid ""
@@ -2699,6 +2815,14 @@ msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid ""
+"Applies a post-processing filter to detect and smoothen high-contrast "
+"edges.\n"
+"Provides balance between speed and image quality.\n"
+"fxaa can used in combination with the other anti-aliasing methods"
+msgstr ""
+
+#: src/settings_translation_file.cpp
+msgid ""
 "Apply dithering to reduce color banding artifacts.\n"
 "Dithering significantly increases the size of losslessly-compressed\n"
 "screenshots and it works incorrectly if the display or operating system\n"
@@ -2719,6 +2843,10 @@ msgid ""
 msgstr ""
 "Непокретност руку, даје стварни изглед\n"
 "кретања руку приликом кретања камере."
+
+#: src/settings_translation_file.cpp
+msgid "Array texture max layers"
+msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid "Ask to reconnect after crash"
@@ -2865,6 +2993,23 @@ msgid "Camera smoothing in cinematic mode"
 msgstr "Глачање камере у погледу трећег лица"
 
 #: src/settings_translation_file.cpp
+msgid ""
+"Caps the maximum number of layers used with array textures (if supported).\n"
+"This is only useful for debugging."
+msgstr ""
+
+#: src/settings_translation_file.cpp
+msgid "Capture Tracy zones"
+msgstr ""
+
+#: src/settings_translation_file.cpp
+msgid ""
+"Capture Tracy zones with the profiler's instrumentation.\n"
+"You need to build with Tracy to use this, see doc/developing/profiling.md\n"
+"for details."
+msgstr ""
+
+#: src/settings_translation_file.cpp
 msgid "Cave noise"
 msgstr ""
 
@@ -2949,6 +3094,11 @@ msgstr ""
 #: src/settings_translation_file.cpp
 msgid "Chat weblinks"
 msgstr ""
+
+#: src/settings_translation_file.cpp
+#, fuzzy
+msgid "Choose theme colors for the main menu background."
+msgstr "Употребљавај оживљавање облака у изборнику и позадини."
 
 #: src/settings_translation_file.cpp
 msgid "Chunk size"
@@ -3070,6 +3220,10 @@ msgid ""
 msgstr ""
 
 #: src/settings_translation_file.cpp
+msgid "Confirmation dialog before closing"
+msgstr ""
+
+#: src/settings_translation_file.cpp
 msgid "Connect glass"
 msgstr "Везујуће стакло"
 
@@ -3176,7 +3330,6 @@ msgid "Debug log level"
 msgstr ""
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Debugging"
 msgstr "Уклањање грешака"
 
@@ -3364,6 +3517,10 @@ msgid "Developer Options"
 msgstr ""
 
 #: src/settings_translation_file.cpp
+msgid "Disable if you only want to instrument with Tracy."
+msgstr ""
+
+#: src/settings_translation_file.cpp
 msgid "Disallow empty passwords"
 msgstr "Онемогући празне лозинке"
 
@@ -3417,6 +3574,10 @@ msgstr ""
 #: src/settings_translation_file.cpp
 msgid "Dungeon noise"
 msgstr ""
+
+#: src/settings_translation_file.cpp
+msgid "Dynamic shadows"
+msgstr "Покретне сене"
 
 #: src/settings_translation_file.cpp
 msgid "Effects"
@@ -3478,6 +3639,11 @@ msgid "Enable Raytraced Culling"
 msgstr ""
 
 #: src/settings_translation_file.cpp
+#, fuzzy
+msgid "Enable a confirmation dialog before closing."
+msgstr "Омогућава оживљавање ставки иметка."
+
+#: src/settings_translation_file.cpp
 msgid ""
 "Enable automatic exposure correction\n"
 "When enabled, the post-processing engine will\n"
@@ -3500,6 +3666,11 @@ msgstr ""
 #: src/settings_translation_file.cpp
 msgid "Enable console window"
 msgstr ""
+
+#: src/settings_translation_file.cpp
+#, fuzzy
+msgid "Enable dynamic shadows"
+msgstr "Покретне сене"
 
 #: src/settings_translation_file.cpp
 msgid "Enable joysticks"
@@ -3656,6 +3827,10 @@ msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid "Fallback font path"
+msgstr ""
+
+#: src/settings_translation_file.cpp
+msgid "Fast approximate antialiasing"
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -4273,14 +4448,15 @@ msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid ""
-"If enabled, actions are recorded for rollback.\n"
-"This option is only read when server starts."
+"If enabled, invalid world data won't cause the server to shut down.\n"
+"Only enable this if you know what you are doing."
 msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid ""
-"If enabled, invalid world data won't cause the server to shut down.\n"
-"Only enable this if you know what you are doing."
+"If enabled, node and inventory actions are recorded for rollback.\n"
+"This option is only read on server start. Note that the engine will not\n"
+"automatically clean old entries from the rollback database."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -5120,6 +5296,16 @@ msgid "Maximum users"
 msgstr "Највећи број играча"
 
 #: src/settings_translation_file.cpp
+#, fuzzy
+msgid "Measure time samples"
+msgstr "Пустињски дворци"
+
+#: src/settings_translation_file.cpp
+#, fuzzy
+msgid "Menu theme"
+msgstr "Дугме изборника"
+
+#: src/settings_translation_file.cpp
 msgid "Message of the day"
 msgstr "Порука дана"
 
@@ -5160,7 +5346,6 @@ msgid "Mipmapping"
 msgstr "Мала карта"
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Miscellaneous"
 msgstr "Разно"
 
@@ -5274,7 +5459,8 @@ msgid ""
 msgstr ""
 "Име играча.\n"
 "Приликом рада служитеља, странка које се повезује са оваквим именом је "
-"руковалац."
+"руковалац.\n"
+"Приликом покретања из главног изборника, ово се премошћује."
 
 #: src/settings_translation_file.cpp
 msgid ""
@@ -5321,16 +5507,12 @@ msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid ""
-"Number of emerge threads to use.\n"
-"Value 0:\n"
-"-    Automatic selection. The number of emerge threads will be\n"
-"-    'number of processors - 2', with a lower limit of 1.\n"
-"Any other value:\n"
-"-    Specifies the number of emerge threads, with a lower limit of 1.\n"
-"WARNING: Increasing the number of emerge threads increases engine mapgen\n"
-"speed, but this may harm game performance by interfering with other\n"
-"processes, especially in singleplayer and/or when running Lua code in\n"
-"'on_generated'. For many users the optimum setting may be '1'."
+"Number of emerge threads (responsible for map generation and loading) to "
+"use.\n"
+"If 0 then the engine will automatically choose a suitable value depending\n"
+"on the hardware and type of map generator.\n"
+"WARNING: There are known bugs in the default map generators (v6, v7, ...)\n"
+"when using more than 1 thread. The automatic choice will avoid this."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -5360,8 +5542,7 @@ msgid "Occlusion Culling"
 msgstr ""
 
 #: src/settings_translation_file.cpp
-msgid ""
-"Opaqueness (alpha) of the shadow behind the default font, between 0 and 255."
+msgid "Opaqueness (alpha) of the shadow behind the font."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -5672,12 +5853,12 @@ msgid "Save the map received by the client on disk."
 msgstr ""
 
 #: src/settings_translation_file.cpp
+#, fuzzy
 msgid ""
 "Save window size automatically when modified.\n"
 "If true, screen size is saved in screen_w and screen_h, and whether the "
 "window\n"
-"is maximized is stored in window_maximized.\n"
-"(Autosaving window_maximized only works if compiled with SDL.)"
+"is maximized is stored in window_maximized."
 msgstr ""
 "Чува величину приказа прозора самостално уколико се промени.\n"
 "Уколико је подешено, величина заслона је сачувана у screen_w and screen_h, и "
@@ -5771,11 +5952,6 @@ msgid ""
 "Also, if Post Processing is disabled, FSAA will not work together with\n"
 "undersampling or a non-default \"3d_mode\" setting.\n"
 "\n"
-"* FXAA - Fast approximate antialiasing\n"
-"Applies a post-processing filter to detect and smoothen high-contrast "
-"edges.\n"
-"Provides balance between speed and image quality.\n"
-"\n"
 "* SSAA - Super-sampling antialiasing\n"
 "Renders higher-resolution image of the scene, then scales down to reduce\n"
 "the aliasing effects. This is the slowest and the most accurate method."
@@ -5829,7 +6005,6 @@ msgid "Send player names to the server list"
 msgstr "Пошаљи имена играча на списак служитеља"
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Server"
 msgstr "Служитељ"
 
@@ -5992,8 +6167,9 @@ msgid "Shadow filter quality"
 msgstr "Каквоћа услова сена"
 
 #: src/settings_translation_file.cpp
-msgid "Shadow map max distance in nodes to render shadows"
-msgstr "Крајња удаљеност сена карти у чворовима ради разлучивања сенки"
+#, fuzzy
+msgid "Shadow map render distance"
+msgstr "Величина ткања сена карте"
 
 #: src/settings_translation_file.cpp
 msgid "Shadow map texture in 32 bits"
@@ -6005,8 +6181,7 @@ msgstr "Величина ткања сена карте"
 
 #: src/settings_translation_file.cpp
 msgid ""
-"Shadow offset (in pixels) of the default font. If 0, then shadow will not be "
-"drawn."
+"Shadow offset (in pixels) for all fonts. If 0, then no shadow will be drawn."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -6129,7 +6304,6 @@ msgid "Soft shadow radius"
 msgstr "Меки пречник сене"
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Sound"
 msgstr "Звук"
 
@@ -6416,7 +6590,7 @@ msgstr ""
 msgid ""
 "The rendering back-end.\n"
 "Note: A restart is required after changing this!\n"
-"OpenGL is the default for desktop, and OGLES2 for Android."
+"By default OpenGL3 is preferred on desktop, or OGLES2 on Android."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -6499,10 +6673,9 @@ msgstr ""
 
 #: src/settings_translation_file.cpp
 msgid ""
-"To reduce lag, block transfers are slowed down when a player is building "
+"To save bandwidth, block transfers are slowed down when a player is building "
 "something.\n"
-"This determines how long they are slowed down after placing or removing a "
-"node."
+"This determines how long the throttling lasts after placing a node."
 msgstr ""
 
 #: src/settings_translation_file.cpp
@@ -6563,7 +6736,6 @@ msgid "Toggle profiler"
 msgstr "Прекидач профилера"
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Toggle unlimited view range"
 msgstr "Дугме прекидач неограниченог опсега погледа."
 
@@ -6668,8 +6840,13 @@ msgid ""
 "set\n"
 "to a non-default value."
 msgstr ""
-"Подузорковање је слично коришћењу ниже размере заслона, али се примењуј\n"
-"само на свет игре, држећи цртежно сучеље нетакнутим."
+"Подузорковање је слично коришћењу ниже размере заслона, али се примењује\n"
+"само на свет игре, држећи цртежно сучеље нетакнутим.\n"
+"Требало би да значајно побољша учинак по цену губљења појединости на слици.\n"
+"Већа вредност исходи у лошију слику.\n"
+"Примедба: Подузроковање тренутно није подржано уколико је постављено "
+"„3d_mode“\n"
+"на вредност која није подразумевана."
 
 #: src/settings_translation_file.cpp
 msgid "Unlimited player transfer distance"
@@ -6804,9 +6981,11 @@ msgid "Vertical climbing speed, in nodes per second."
 msgstr "Усправна брзина пењања, у чворовима по секунди."
 
 #: src/settings_translation_file.cpp
+#, fuzzy
 msgid ""
-"Vertical screen synchronization. Your system may still force VSync on even "
-"if this is disabled."
+"Vertical screen synchronization.\n"
+"Note: A restart is required after changing this!\n"
+"Your system may still force VSync and ignore this setting."
 msgstr ""
 "Усправно усклађивање заслона. Ваш строј може и даље присиљавати ВСунц иако "
 "је ово онемогућено."
@@ -7011,11 +7190,8 @@ msgid "Width of the selection box lines around nodes."
 msgstr "Ширина линија около чворова кутија означавања."
 
 #: src/settings_translation_file.cpp
-#, fuzzy
 msgid "Will also disable autoforward, when active."
-msgstr ""
-"Дугме за кретање играча уназад.\n"
-"Такође онемогућава самостално уназад, када делује."
+msgstr "Такође онемогућава самостално уназад, када делује."
 
 #: src/settings_translation_file.cpp
 msgid "Window maximized"
@@ -7114,188 +7290,19 @@ msgstr ""
 msgid "cURL parallel limit"
 msgstr ""
 
-#~ msgid "Key for decreasing the viewing range."
-#~ msgstr "Дугме за смањивање опсега погледа."
+#: src/util/screenshot.cpp
+#, c-format
+msgid "Failed to save screenshot to \"%s\""
+msgstr ""
 
-#~ msgid "Key for decreasing the volume."
-#~ msgstr "Дугме за смањивање јачине звука."
+#~ msgid "Provided world path doesn't exist: "
+#~ msgstr "Достављена путања света не постоји: "
 
-#~ msgid "Key for dropping the currently selected item."
-#~ msgstr "Дугме за испуштање тренутно означене ставке."
+#~ msgid "Shadow map max distance in nodes to render shadows"
+#~ msgstr "Крајња удаљеност сена карти у чворовима ради разлучивања сенки"
 
-#~ msgid "Key for increasing the viewing range."
-#~ msgstr "Дугме за повећање опсега погледа."
+#~ msgid "Y spread"
+#~ msgstr "прошири у"
 
-#~ msgid "Key for increasing the volume."
-#~ msgstr "Дугме за појачавање звука."
-
-#~ msgid "Key for jumping."
-#~ msgstr "Дугме за рипање."
-
-#~ msgid "Key for moving the player forward."
-#~ msgstr "Дугме за кретање играча напред."
-
-#~ msgid "Key for moving the player left."
-#~ msgstr "Дугме за кретање играча улево."
-
-#~ msgid "Key for moving the player right."
-#~ msgstr "Дугме за кретање играча удесно."
-
-#~ msgid "Key for muting the game."
-#~ msgstr "Дугме за умукнути игру."
-
-#~ msgid "Key for opening the chat window."
-#~ msgstr "Дугме за отварање прозора ћаскања."
-
-#~ msgid "Key for opening the inventory."
-#~ msgstr "Дугме за отварање иметка."
-
-#~ msgid "Key for selecting the 11th hotbar slot."
-#~ msgstr "Дугме за означавање једанаестог брзог поља."
-
-#~ msgid "Key for selecting the 12th hotbar slot."
-#~ msgstr "Дугме за означавање дванаестог брзог поља."
-
-#~ msgid "Key for selecting the 13th hotbar slot."
-#~ msgstr "Дугме за означавање тринаестог брзог поља."
-
-#~ msgid "Key for selecting the 14th hotbar slot."
-#~ msgstr "Дугме за означавање четрнаестог брзог поља."
-
-#~ msgid "Key for selecting the 15th hotbar slot."
-#~ msgstr "Дугме за означавање петнаестог брзог поља."
-
-#~ msgid "Key for selecting the 16th hotbar slot."
-#~ msgstr "Дугме за означавање шестнаестог брзог поља."
-
-#~ msgid "Key for selecting the 17th hotbar slot."
-#~ msgstr "Дугме за означавање седамнаестог брзог поља."
-
-#~ msgid "Key for selecting the 18th hotbar slot."
-#~ msgstr "Дугме за означавање осамнаестог брзог поља."
-
-#~ msgid "Key for selecting the 19th hotbar slot."
-#~ msgstr "Дугме за означавање деветнаестог брзог поља."
-
-#~ msgid "Key for selecting the 20th hotbar slot."
-#~ msgstr "Дугме за означавање двадесетог брзог поља."
-
-#~ msgid "Key for selecting the 21st hotbar slot."
-#~ msgstr "Дугме за означавање двадесет првог брзог поља."
-
-#~ msgid "Key for selecting the 22nd hotbar slot."
-#~ msgstr "Дугме за означавање двадесет другог брзог поља."
-
-#~ msgid "Key for selecting the 23rd hotbar slot."
-#~ msgstr "Дугме за означавање двадесет трећег брзог поља."
-
-#~ msgid "Key for selecting the 24th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет четвртог брзог поља."
-
-#~ msgid "Key for selecting the 25th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет петог брзог поља."
-
-#~ msgid "Key for selecting the 26th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет шестог брзог поља."
-
-#~ msgid "Key for selecting the 27th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет седмог брзог поља."
-
-#~ msgid "Key for selecting the 28th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет осмог брзог поља."
-
-#~ msgid "Key for selecting the 29th hotbar slot."
-#~ msgstr "Дугме за означавање двадесет деветог брзог поља."
-
-#~ msgid "Key for selecting the 30th hotbar slot."
-#~ msgstr "Дугме за означавање тридесетог брзог поља."
-
-#~ msgid "Key for selecting the 31st hotbar slot."
-#~ msgstr "Дугме за означавање тридесет првог брзог поља."
-
-#~ msgid "Key for selecting the 32nd hotbar slot."
-#~ msgstr "Дугме за означавање тридесет другог брзог поља."
-
-#~ msgid "Key for selecting the eighth hotbar slot."
-#~ msgstr "Дугме за означавање осмог брзог поља."
-
-#~ msgid "Key for selecting the fifth hotbar slot."
-#~ msgstr "Дугме за означавање петог брзог поља."
-
-#~ msgid "Key for selecting the first hotbar slot."
-#~ msgstr "Дугме за означавање првог брзог поља."
-
-#~ msgid "Key for selecting the fourth hotbar slot."
-#~ msgstr "Дугме за означавање четвртог брзог поља."
-
-#~ msgid "Key for selecting the next item in the hotbar."
-#~ msgstr "Дугме за означавање следеће ставке у врућој траци."
-
-#~ msgid "Key for selecting the ninth hotbar slot."
-#~ msgstr "Дугме за означавање деветог брзог поља."
-
-#~ msgid "Key for selecting the previous item in the hotbar."
-#~ msgstr "Дугме за означавање претходне ставке у врућој траци."
-
-#~ msgid "Key for selecting the second hotbar slot."
-#~ msgstr "Дугме за означавање другог брзог поља."
-
-#~ msgid "Key for selecting the seventh hotbar slot."
-#~ msgstr "Дугме за означавање седмог брзог поља."
-
-#~ msgid "Key for selecting the sixth hotbar slot."
-#~ msgstr "Дугме за означавање шестог брзог поља."
-
-#~ msgid "Key for selecting the tenth hotbar slot."
-#~ msgstr "Дугме за означавање десетог брзог поља."
-
-#~ msgid "Key for selecting the third hotbar slot."
-#~ msgstr "Дугме за означавање трећег брзог поља."
-
-#~ msgid "Key for switching between first- and third-person camera."
-#~ msgstr "Дугме за прелаз погледа из првог и трећег лица."
-
-#~ msgid "Key for taking screenshots."
-#~ msgstr "Дугме за сликање заслона радне површи."
-
-#~ msgid "Key for toggling autoforward."
-#~ msgstr "Дугме прекидач самосталног кретања напред."
-
-#~ msgid "Key for toggling cinematic mode."
-#~ msgstr "Дугме прекидач приказа погледа из трећег лица."
-
-#~ msgid "Key for toggling display of minimap."
-#~ msgstr "Дугме прекидач приказа мале карте."
-
-#~ msgid "Key for toggling fast mode."
-#~ msgstr "Дугме прекидач брзог кретања."
-
-#~ msgid "Key for toggling flying."
-#~ msgstr "Дугме прекидач летења."
-
-#~ msgid "Key for toggling fullscreen mode."
-#~ msgstr "Дугме прекидач за пуни приказ прозора игре."
-
-#~ msgid "Key for toggling noclip mode."
-#~ msgstr "Дугме прекидач кретања скрозирањем."
-
-#~ msgid "Key for toggling pitch move mode."
-#~ msgstr "Дугме прекидач за нагибно кретање."
-
-#~ msgid "Key for toggling the display of chat."
-#~ msgstr "Дугме прекидач приказа ћаскања."
-
-#~ msgid "Key for toggling the display of debug info."
-#~ msgstr "Дугме прекидач приказа података о исправкама грешака."
-
-#~ msgid "Key for toggling the display of fog."
-#~ msgstr "Дугме прекидач приказа магле."
-
-#~ msgid "Key for toggling the display of the HUD."
-#~ msgstr "Дугме прекидач приказа ХУД-а."
-
-#~ msgid "Key for toggling the display of the large chat console."
-#~ msgstr "Дугме прекидач приказа великог прозора ћаскања."
-
-#~ msgid "Key to use view zoom when possible."
-#~ msgstr "Дугме за приближен поглед када је могуће."
+#~ msgid "Z spread"
+#~ msgstr "прошири z"

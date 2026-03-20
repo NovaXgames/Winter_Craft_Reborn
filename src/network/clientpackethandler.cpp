@@ -15,6 +15,7 @@
 #include "servermap.h"
 #include "mapsector.h"
 #include "client/minimap.h"
+#include "itemdef.h"
 #include "modchannels.h"
 #include "nodedef.h"
 #include "serialization.h"
@@ -34,6 +35,7 @@
 #include "skyparams.h"
 #include "particles.h"
 #include <memory>
+#include <sstream>
 
 const char *accessDeniedStrings[SERVER_ACCESSDENIED_MAX] = {
 	N_("Invalid password"),
@@ -153,6 +155,14 @@ void Client::handleCommand_AuthAccept(NetworkPacket* pkt)
 	Send(&resp_pkt);
 
 	m_state = LC_Init;
+
+	// Log meaningful info
+	if (!m_internal_server) {
+		Address remote = m_con->GetPeerAddress(PEER_ID_SERVER);
+		actionstream << "Connected to " << m_address_name << " (";
+		remote.print(actionstream);
+		actionstream << ")" << std::endl;
+	}
 }
 
 void Client::handleCommand_AcceptSudoMode(NetworkPacket* pkt)
@@ -183,7 +193,7 @@ void Client::handleCommand_AccessDenied(NetworkPacket* pkt)
 {
 	// The server didn't like our password. Note, this needs
 	// to be processed even if the serialization format has
-	// not been agreed yet, the same as TOCLIENT_INIT.
+	// not been agreed yet, the same as TOCLIENT_AUTH_ACCEPT.
 	m_access_denied = true;
 
 	if (pkt->getCommand() != TOCLIENT_ACCESS_DENIED) {
@@ -382,6 +392,9 @@ void Client::handleCommand_ChatMessage(NetworkPacket *pkt)
 
 	chatMessage->type = (ChatMessageType) message_type;
 
+	// log the chat message
+	actionstream << "CHAT: " << wide_to_utf8(unescape_enriched(chatMessage->message)) << std::endl;
+
 	// @TODO send this to CSM using ChatMessage object
 	if (modsLoaded() && m_script->on_receiving_message(
 			wide_to_utf8(chatMessage->message))) {
@@ -452,20 +465,12 @@ void Client::handleCommand_ActiveObjectMessages(NetworkPacket* pkt)
 	std::string datastring(pkt->getString(0), pkt->getSize());
 	std::istringstream is(datastring, std::ios_base::binary);
 
-	try {
-		while (is.good()) {
-			u16 id = readU16(is);
-			if (!is.good())
-				break;
+	while (canRead(is)) {
+		u16 id = readU16(is);
+		std::string message = deSerializeString16(is);
 
-			std::string message = deSerializeString16(is);
-
-			// Pass on to the environment
-			m_env.processActiveObjectMessage(id, message);
-		}
-	} catch (SerializationError &e) {
-		errorstream << "Client::handleCommand_ActiveObjectMessages: "
-			<< "caught SerializationError: " << e.what() << std::endl;
+		// Pass on to the environment
+		m_env.processActiveObjectMessage(id, message);
 	}
 }
 
@@ -968,6 +973,29 @@ void Client::handleCommand_SpawnParticle(NetworkPacket* pkt)
 	m_client_event_queue.push(event);
 }
 
+void Client::handleCommand_SpawnParticleBatch(NetworkPacket *pkt)
+{
+	std::stringstream particle_batch_data(std::ios::binary | std::ios::in | std::ios::out);
+	{
+		std::istringstream compressed(pkt->readLongString(), std::ios::binary);
+		decompressZstd(compressed, particle_batch_data);
+	}
+
+	while (canRead(particle_batch_data)) {
+		auto p = std::make_unique<ParticleParameters>();
+		{
+			std::istringstream particle_data(deSerializeString32(particle_batch_data), std::ios::binary);
+			p->deSerialize(particle_data, m_proto_ver);
+		}
+
+		ClientEvent *event = new ClientEvent();
+		event->type = CE_SPAWN_PARTICLE;
+		event->spawn_particle = p.release();
+
+		m_client_event_queue.push(event);
+	}
+}
+
 void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 {
 	std::string datastring(pkt->getString(0), pkt->getSize());
@@ -1013,25 +1041,24 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 	p.glow = readU8(is);
 	p.object_collision = readU8(is);
 
-	// This is kinda awful
 	do {
-		u16 tmp_param0 = readU16(is);
-		if (is.eof())
+		if (!canRead(is))
 			break;
-		p.node.param0 = tmp_param0;
+		// >= 5.3.0-dev
+
+		p.node.param0 = readU16(is);;
 		p.node.param2 = readU8(is);
 		p.node_tile   = readU8(is);
 
 		if (m_proto_ver < 42) {
 			// v >= 5.6.0
-			f32 tmp_sbias = readF32(is);
-			if (is.eof())
+			if (!canRead(is))
 				break;
 
 			// initial bias must be stored separately in the stream to preserve
 			// backwards compatibility with older clients, which do not support
 			// a bias field in their range "format"
-			p.pos.start.bias = tmp_sbias;
+			p.pos.start.bias = readF32(is);
 			p.vel.start.bias = readF32(is);
 			p.acc.start.bias = readF32(is);
 			p.exptime.start.bias = readF32(is);
@@ -1076,6 +1103,10 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 			newtex.deSerialize(is, m_proto_ver);
 			p.texpool.push_back(newtex);
 		}
+
+		//if (!canRead(is))
+		//	break;
+		// Add new code here
 	} while(0);
 
 	if (missing_end_values) {
@@ -1409,6 +1440,7 @@ void Client::handleCommand_HudSetStars(NetworkPacket *pkt)
 		>> stars.starcolor >> stars.scale;
 	try {
 		*pkt >> stars.day_opacity;
+		*pkt >> stars.star_seed;
 	} catch (PacketError &e) {};
 
 	ClientEvent *event = new ClientEvent();
