@@ -134,7 +134,9 @@ local function get_formspec(tabview, name, tabdata)
 		"container_end[]" ..
 
 		-- Connect
-		"button[3,6;2.5,0.75;btn_mp_login;" .. fgettext("Login") .. "]"
+		"button[3,6;2.5,0.75;btn_mp_login;" .. fgettext("Login") .. "]" ..
+		"button[0.25,6.35;2.5,0.6;btn_my_servers;" .. fgettext("My Servers") .. "]" ..
+		"button[3,6.35;2.5,0.6;btn_create_server;" .. fgettext("Create Server") .. "]"
 
 	if core.settings:get_bool("enable_split_login_register") then
 		retval = retval .. "button[0.25,6;2.5,0.75;btn_mp_register;" .. fgettext("Register") .. "]"
@@ -513,6 +515,35 @@ local function main_button_handler(tabview, fields, name, tabdata)
 		dlg:set_parent(tabview)
 		tabview:hide()
 		dlg:show()
+		return true
+	end
+
+	if fields.btn_my_servers then
+		local dlg = create_manage_servers_dialog()
+		dlg:set_parent(tabview)
+		tabview:hide()
+		dlg:show()
+		return true
+	end
+
+	if fields.btn_create_server then
+		local address = (fields.te_address or ""):trim()
+		local te_port_number = tonumber((fields.te_port or ""):match("^%s*(%d+)%s*$"))
+		if address == "" or not te_port_number or te_port_number < 1 or te_port_number > 65535 then
+			local dlg = messagebox("dlg_create_server_error",
+				fgettext("Enter a valid address and port before creating a server."))
+			dlg:set_parent(tabview)
+			tabview:hide()
+			dlg:show()
+			return true
+		end
+
+		serverlistmgr.add_favorite({
+			address = address,
+			port = te_port_number,
+		})
+		core.settings:set("address", address)
+		core.settings:set("remote_port", te_port_number)
 		return true
 	end
 

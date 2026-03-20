@@ -13,6 +13,50 @@ local valid_disabled_settings = {
 -- Name and port stored to persist when updating the formspec
 local current_name = core.settings:get("name")
 local current_port = core.settings:get("port")
+local world_selector_open = false
+local selected_mode = core.settings:get("wintercraft_last_mode") or "survival"
+
+local MENU_MODE_SETTINGS = {
+	story = {
+		creative_mode = false,
+		enable_damage = false,
+	},
+	survival = {
+		creative_mode = false,
+		enable_damage = true,
+	},
+	creative = {
+		creative_mode = true,
+		enable_damage = false,
+	},
+}
+
+local MODE_LABELS = {
+	story = fgettext("Story"),
+	survival = fgettext("Survival"),
+	creative = fgettext("Creative"),
+}
+
+if not MENU_MODE_SETTINGS[selected_mode] then
+	selected_mode = "survival"
+end
+
+local function set_menu_mode(mode)
+	local settings = MENU_MODE_SETTINGS[mode]
+	if not settings then
+		return
+	end
+
+	selected_mode = mode
+	core.settings:set("wintercraft_last_mode", mode)
+	core.settings:set_bool("creative_mode", settings.creative_mode)
+	core.settings:set_bool("enable_damage", settings.enable_damage)
+	core.settings:set_bool("enable_server", false)
+end
+
+local function get_mode_label()
+	return MODE_LABELS[selected_mode] or MODE_LABELS.survival
+end
 
 -- Currently chosen game in gamebar for theming and filtering
 function current_game()
@@ -145,6 +189,32 @@ local function get_disabled_settings(game)
 	return disabled_settings
 end
 
+local function get_home_formspec()
+	local blank = core.formspec_escape(defaulttexturedir .. "blank.png")
+	local icon_story = core.formspec_escape(defaulttexturedir .. "start_icon.png")
+	local icon_survival = core.formspec_escape(defaulttexturedir .. "server_flags_damage.png")
+	local icon_creative = core.formspec_escape(defaulttexturedir .. "server_flags_creative.png")
+	local icon_servers = core.formspec_escape(defaulttexturedir .. "server_public.png")
+
+	return table.concat({
+		"style[mode_story,mode_survival,mode_creative,mode_servers;" ..
+			"bgcolor=#7d736d;bgcolor_hovered=#91857d;bgcolor_pressed=#655d58;" ..
+			"border=true;font_size=22;textcolor=#f2f0ed]",
+		"style[open_settings;bgcolor=#7d736d;bgcolor_hovered=#91857d;" ..
+			"bgcolor_pressed=#655d58;border=true;font_size=18;textcolor=#f2f0ed]",
+		"image_button[0.375,1.45;3.55,3.35;" .. blank .. ";mode_story;" .. fgettext("Story") .. "]",
+		"image[1.575,2.35;1.1,1.1;" .. icon_story .. "]",
+		"image_button[4.075,1.45;3.55,3.35;" .. blank .. ";mode_survival;" .. fgettext("Survival") .. "]",
+		"image[5.275,2.35;1.1,1.1;" .. icon_survival .. "]",
+		"image_button[7.775,1.45;3.55,3.35;" .. blank .. ";mode_creative;" .. fgettext("Creative") .. "]",
+		"image[8.975,2.35;1.1,1.1;" .. icon_creative .. "]",
+		"image_button[11.475,1.45;3.55,3.35;" .. blank .. ";mode_servers;" .. fgettext("Servers") .. "]",
+		"image[12.675,2.35;1.1,1.1;" .. icon_servers .. "]",
+		"button[0.375,6.225;3.55,0.8;open_settings;" .. fgettext("Settings") .. "]",
+		"label[4.15,6.5;" .. fgettext("Current mode: $1", get_mode_label()) .. "]",
+	})
+end
+
 local function get_formspec(tabview, name, tabdata)
 
 	-- Point the player to ContentDB when no games are found
@@ -161,6 +231,10 @@ local function get_formspec(tabview, name, tabdata)
 		return table.concat({
 			"hypertext[0.375,0;", W - 2*0.375, ",", button_y, ";ht;", core.formspec_escape(hypertext), "]",
 			"button[5.25,", button_y, ";5,1.2;game_open_cdb;", fgettext("Install a game"), "]"})
+	end
+
+	if not world_selector_open then
+		return get_home_formspec()
 	end
 
 	local retval = ""
@@ -206,6 +280,8 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	retval = retval ..
+			"button[12.05,0.05;3.075,0.8;world_home;" .. fgettext("Main Menu") .. "]" ..
+			"label[5.25,0.2;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
 			"container[5.25,4.875]" ..
 			"button[6.65,0;3.225,0.8;world_create;".. fgettext("New") .. "]"
 	if world then
@@ -279,6 +355,62 @@ local function main_button_handler(this, fields, name, tabdata)
 		dlg:set_parent(maintab)
 		maintab:hide()
 		dlg:show()
+		return true
+	end
+
+	if not world_selector_open then
+		if fields.open_settings then
+			local dlg = create_settings_dlg()
+			dlg:set_parent(this)
+			this:hide()
+			dlg:show()
+			return true
+		end
+
+		if fields.mode_story then
+			set_menu_mode("story")
+			world_selector_open = true
+			local gamebar = ui.find_by_name("game_button_bar")
+			if gamebar then
+				gamebar:show()
+			end
+			return true
+		end
+
+		if fields.mode_survival then
+			set_menu_mode("survival")
+			world_selector_open = true
+			local gamebar = ui.find_by_name("game_button_bar")
+			if gamebar then
+				gamebar:show()
+			end
+			return true
+		end
+
+		if fields.mode_creative then
+			set_menu_mode("creative")
+			world_selector_open = true
+			local gamebar = ui.find_by_name("game_button_bar")
+			if gamebar then
+				gamebar:show()
+			end
+			return true
+		end
+
+		if fields.mode_servers then
+			this:set_tab("online")
+			return true
+		end
+
+		return true
+	end
+
+	if fields.world_home then
+		world_selector_open = false
+		local gamebar = ui.find_by_name("game_button_bar")
+		if gamebar then
+			gamebar:hide()
+		end
 		return true
 	end
 
@@ -446,6 +578,8 @@ end
 
 local function on_change(type)
 	if type == "ENTER" then
+		world_selector_open = false
+
 		local game = current_game()
 		if game then
 			apply_game(game)
@@ -454,9 +588,10 @@ local function on_change(type)
 		end
 
 		if singleplayer_refresh_gamebar() then
-			ui.find_by_name("game_button_bar"):show()
+			ui.find_by_name("game_button_bar"):hide()
 		end
 	elseif type == "LEAVE" then
+		world_selector_open = false
 		menudata.worldlist:set_filtercriteria(nil)
 		local gamebar = ui.find_by_name("game_button_bar")
 		if gamebar then
