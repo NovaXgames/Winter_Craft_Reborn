@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-package net.minetest.minetest;
+package com.novaxgames.wintercraftreborn;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
@@ -39,15 +39,15 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import static net.minetest.minetest.UnzipService.*;
+import static com.novaxgames.wintercraftreborn.UnzipService.*;
 
 public class MainActivity extends AppCompatActivity {
-	public static final String NOTIFICATION_CHANNEL_ID = "Minetest channel";
+	public static final String NOTIFICATION_CHANNEL_ID = "WintercraftReborn channel";
 	public static final int NOTIFICATION_ID_UNZIP = 1;
 	public static final int NOTIFICATION_ID_GAME = 2;
 
 	private final static int versionCode = BuildConfig.VERSION_CODE;
-	private static final String SETTINGS = "MinetestSettings";
+	private static final String SETTINGS = "WintercraftRebornSettings";
 	private static final String TAG_VERSION_CODE = "versionCode";
 
 	private ProgressBar mProgressBar;
