@@ -145,7 +145,7 @@ local function get_formspec(tabview, name, tabdata)
 		"label[2.95,0.25;" .. fgettext("Password") .. "]" ..
 		"field[0.15,0.5;2.7,0.75;te_name;;" .. core.formspec_escape(core.settings:get("name")) .. "]" ..
 		"pwdfield[2.95,0.5;2.3,0.75;te_pwd;]" ..
-		"container_end[]" ..
+		"container_end[]"
 
 	if core.settings:get_bool("enable_split_login_register") then
 		retval = retval ..
