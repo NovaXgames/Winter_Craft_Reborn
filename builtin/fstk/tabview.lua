@@ -54,11 +54,14 @@ local function get_formspec(self)
 	local content, prepend = tab.get_formspec(self, tab.name, tab.tabdata, tab.tabsize)
 
 	local TOUCH_GUI = core.settings:get_bool("touch_gui")
+	local show_tab_header = self.show_tab_header ~= false
+	local show_background_box = self.show_background_box ~= false
+	local header_height = show_tab_header and TABHEADER_H or 0
 
 	local orig_tsize = tab.tabsize or { width = self.width, height = self.height }
 	local tsize = { width = orig_tsize.width, height = orig_tsize.height }
 	tsize.height = tsize.height
-		+ TABHEADER_H -- tabheader included in formspec size
+		+ header_height -- tabheader included in formspec size
 		+ (TOUCH_GUI and GAMEBAR_OFFSET_TOUCH or GAMEBAR_OFFSET_DESKTOP)
 		+ GAMEBAR_H -- gamebar included in formspec size
 
@@ -66,7 +69,7 @@ local function get_formspec(self)
 		prepend = string.format("size[%f,%f,%s]", tsize.width, tsize.height,
 				dump(self.fixed_size))
 
-		local anchor_pos = TABHEADER_H + orig_tsize.height / 2
+		local anchor_pos = header_height + orig_tsize.height / 2
 		prepend = prepend .. ("anchor[0.5,%f]"):format(anchor_pos / tsize.height)
 
 		if tab.formspec_version then
@@ -76,17 +79,22 @@ local function get_formspec(self)
 
 	local end_button_size = 0.75
 
-	local tab_header_size = { width = tsize.width, height = TABHEADER_H }
+	local tab_header_size = { width = tsize.width, height = header_height }
 	if self.end_button then
 		tab_header_size.width = tab_header_size.width - end_button_size - 0.1
 	end
 
 	local formspec = (prepend or "")
-	formspec = formspec .. ("bgcolor[;neither]container[0,%f]box[0,0;%f,%f;#0000008C]"):format(
-			TABHEADER_H, orig_tsize.width, orig_tsize.height)
-	formspec = formspec .. self:tab_header(tab_header_size) .. content
+	formspec = formspec .. ("bgcolor[;neither]container[0,%f]"):format(header_height)
+	if show_background_box then
+		formspec = formspec .. ("box[0,0;%f,%f;#0000008C]"):format(orig_tsize.width, orig_tsize.height)
+	end
+	if show_tab_header then
+		formspec = formspec .. self:tab_header(tab_header_size)
+	end
+	formspec = formspec .. content
 
-	if self.end_button then
+	if self.end_button and show_tab_header then
 		formspec = formspec ..
 				("style[%s;noclip=true;border=false]"):format(self.end_button.name) ..
 				("tooltip[%s;%s]"):format(self.end_button.name, self.end_button.label) ..
@@ -263,6 +271,10 @@ local tabview_metatable = {
 			function(self,state) self.fixed_size = state end,
 	set_end_button =
 			function(self, v) self.end_button = v end,
+	set_show_tab_header =
+			function(self, state) self.show_tab_header = state end,
+	set_show_background_box =
+			function(self, state) self.show_background_box = state end,
 	tab_header = tab_header,
 	handle_tab_buttons = handle_tab_buttons
 }
@@ -289,6 +301,8 @@ function tabview_create(name, size, tabheaderpos)
 	self.tablist        = {}
 
 	self.autosave_tab   = false
+	self.show_tab_header = true
+	self.show_background_box = true
 
 	ui.add(self)
 	return self

@@ -42,6 +42,12 @@ local function get_sorted_servers()
 	return servers
 end
 
+local function wc_button_style(names, font_size)
+	return "style[" .. names .. ";bgcolor=#514b46e0;bgcolor_hovered=#6b635de0;" ..
+		"bgcolor_pressed=#3b3633ff;border=true;font_size=" .. font_size ..
+		";textcolor=#f2f0ed]"
+end
+
 local function is_selected_fav(server)
 	local address = core.settings:get("address")
 	local port = tonumber(core.settings:get("remote_port"))
@@ -97,6 +103,9 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	local retval =
+		wc_button_style("btn_main_menu,btn_mp_login,btn_mp_register,btn_my_servers,btn_create_server", 17) ..
+		"box[0.15,0.15;9.45,6.95;#10101096]" ..
+		"box[9.85,0.15;5.85,6.95;#10101096]" ..
 		-- Search
 		"field[0.25,0.25;7,0.75;te_search;;" .. core.formspec_escape(tabdata.search_for) .. "]" ..
 		"tooltip[te_search;" .. fgettext("Possible filters\ngame:<name>\nmod:<name>\nplayer:<name>") .. "]" ..
@@ -109,9 +118,10 @@ local function get_formspec(tabview, name, tabdata)
 		"tooltip[btn_mp_search;" .. fgettext("Search") .. "]" ..
 		"tooltip[btn_mp_refresh;" .. fgettext("Refresh") .. "]" ..
 		"container_end[]" ..
+		"button[15.95,0.25;2.85,0.75;btn_main_menu;" .. fgettext("Main Menu") .. "]" ..
 
-		"container[9.75,0]" ..
-		"box[0,0;5.75,7.1;#666666]" ..
+		"container[10.0,0.25]" ..
+		"box[0,0;5.45,6.45;#66666655]" ..
 
 		-- Address / Port
 		"label[0.25,0.35;" .. fgettext("Address") .. "]" ..
@@ -134,12 +144,12 @@ local function get_formspec(tabview, name, tabdata)
 		"container_end[]" ..
 
 		-- Connect
-		"button[3,6;2.5,0.75;btn_mp_login;" .. fgettext("Login") .. "]" ..
-		"button[0.25,6.35;2.5,0.6;btn_my_servers;" .. fgettext("My Servers") .. "]" ..
-		"button[3,6.35;2.5,0.6;btn_create_server;" .. fgettext("Create Server") .. "]"
+		"button[3,5.95;2.45,0.7;btn_mp_login;" .. fgettext("Login") .. "]" ..
+		"button[0.25,6.2;2.45,0.6;btn_my_servers;" .. fgettext("My Servers") .. "]" ..
+		"button[3,6.2;2.45,0.6;btn_create_server;" .. fgettext("Create Server") .. "]"
 
 	if core.settings:get_bool("enable_split_login_register") then
-		retval = retval .. "button[0.25,6;2.5,0.75;btn_mp_register;" .. fgettext("Register") .. "]"
+		retval = retval .. "button[0.25,5.95;2.45,0.7;btn_mp_register;" .. fgettext("Register") .. "]"
 	end
 
 	local selected_server = find_selected_server()
@@ -547,6 +557,11 @@ local function main_button_handler(tabview, fields, name, tabdata)
 		return true
 	end
 
+	if fields.btn_main_menu then
+		tabview:set_tab("local")
+		return true
+	end
+
 	if fields.btn_mp_clear then
 		tabdata.search_for = ""
 		menudata.search_result = nil
@@ -637,7 +652,7 @@ end
 
 local function on_change(type)
 	if type == "ENTER" then
-		mm_game_theme.set_engine()
+		mm_game_theme.set_engine(true)
 		serverlistmgr.sync()
 	end
 end

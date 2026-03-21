@@ -41,6 +41,16 @@ if not MENU_MODE_SETTINGS[selected_mode] then
 	selected_mode = "survival"
 end
 
+local function wc_texture(name)
+	return core.formspec_escape(defaulttexturedir .. name)
+end
+
+local function wc_button_style(names, font_size)
+	return "style[" .. names .. ";bgcolor=#514b46e0;bgcolor_hovered=#6b635de0;" ..
+		"bgcolor_pressed=#3b3633ff;border=true;font_size=" .. font_size ..
+		";textcolor=#f2f0ed]"
+end
+
 local function set_menu_mode(mode)
 	local settings = MENU_MODE_SETTINGS[mode]
 	if not settings then
@@ -87,7 +97,7 @@ function apply_game(game)
 	core.settings:set("menu_last_game", game.id)
 	menudata.worldlist:set_filtercriteria(game.id)
 
-	mm_game_theme.set_game(game)
+	mm_game_theme.set_engine(true)
 
 	local index = filterlist.get_current_index(menudata.worldlist,
 		tonumber(core.settings:get("mainmenu_last_selected_world")))
@@ -190,28 +200,19 @@ local function get_disabled_settings(game)
 end
 
 local function get_home_formspec()
-	local blank = core.formspec_escape(defaulttexturedir .. "blank.png")
-	local icon_story = core.formspec_escape(defaulttexturedir .. "start_icon.png")
-	local icon_survival = core.formspec_escape(defaulttexturedir .. "server_flags_damage.png")
-	local icon_creative = core.formspec_escape(defaulttexturedir .. "server_flags_creative.png")
-	local icon_servers = core.formspec_escape(defaulttexturedir .. "server_public.png")
-
 	return table.concat({
-		"style[mode_story,mode_survival,mode_creative,mode_servers;" ..
-			"bgcolor=#7d736d;bgcolor_hovered=#91857d;bgcolor_pressed=#655d58;" ..
-			"border=true;font_size=22;textcolor=#f2f0ed]",
-		"style[open_settings;bgcolor=#7d736d;bgcolor_hovered=#91857d;" ..
-			"bgcolor_pressed=#655d58;border=true;font_size=18;textcolor=#f2f0ed]",
-		"image_button[0.375,1.45;3.55,3.35;" .. blank .. ";mode_story;" .. fgettext("Story") .. "]",
-		"image[1.575,2.35;1.1,1.1;" .. icon_story .. "]",
-		"image_button[4.075,1.45;3.55,3.35;" .. blank .. ";mode_survival;" .. fgettext("Survival") .. "]",
-		"image[5.275,2.35;1.1,1.1;" .. icon_survival .. "]",
-		"image_button[7.775,1.45;3.55,3.35;" .. blank .. ";mode_creative;" .. fgettext("Creative") .. "]",
-		"image[8.975,2.35;1.1,1.1;" .. icon_creative .. "]",
-		"image_button[11.475,1.45;3.55,3.35;" .. blank .. ";mode_servers;" .. fgettext("Servers") .. "]",
-		"image[12.675,2.35;1.1,1.1;" .. icon_servers .. "]",
-		"button[0.375,6.225;3.55,0.8;open_settings;" .. fgettext("Settings") .. "]",
-		"label[4.15,6.5;" .. fgettext("Current mode: $1", get_mode_label()) .. "]",
+		"bgcolor[#ffffff00;false]",
+		"image[3.2,0.65;12.8,2.02;" .. wc_texture("wintercraft_logo_menu.png") .. "]",
+		"image_button[1.82,3.85;3.48,3.432;" .. wc_texture("wintercraft_story_button1.png") ..
+			";mode_story;;true;false;" .. wc_texture("wintercraft_story_button2.png") .. "]",
+		"image_button[5.85,3.85;3.48,3.432;" .. wc_texture("wintercraft_survival_button1.png") ..
+			";mode_survival;;true;false;" .. wc_texture("wintercraft_survival_button2.png") .. "]",
+		"image_button[9.88,3.85;3.48,3.432;" .. wc_texture("wintercraft_creative_button1.png") ..
+			";mode_creative;;true;false;" .. wc_texture("wintercraft_creative_button2.png") .. "]",
+		"image_button[13.91,3.85;3.48,3.432;" .. wc_texture("wintercraft_servers_button1.png") ..
+			";mode_servers;;true;false;" .. wc_texture("wintercraft_servers_button2.png") .. "]",
+		"image_button[7.5,9.25;4.2,1.056;" .. wc_texture("wintercraft_settings_button1.png") ..
+			";open_settings;;true;false;" .. wc_texture("wintercraft_settings_button2.png") .. "]",
 	})
 end
 
@@ -255,92 +256,30 @@ local function get_formspec(tabview, name, tabdata)
 	end
 	local disabled_settings = get_disabled_settings(game)
 
-	local creative, damage, host = "", "", ""
-
-	-- Y offsets for game settings checkboxes
-	local y = 0.2
-	local yo = 0.5625
-
-	if world then
-		if disabled_settings["creative_mode"] == nil then
-			creative = "checkbox[0,"..y..";cb_creative_mode;".. fgettext("Creative Mode") .. ";" ..
-				dump(core.settings:get_bool("creative_mode")) .. "]"
-			y = y + yo
-		end
-		if disabled_settings["enable_damage"] == nil then
-			damage = "checkbox[0,"..y..";cb_enable_damage;".. fgettext("Enable Damage") .. ";" ..
-				dump(core.settings:get_bool("enable_damage")) .. "]"
-			y = y + yo
-		end
-		if disabled_settings["enable_server"] == nil then
-			host = "checkbox[0,"..y..";cb_server;".. fgettext("Host Server") ..";" ..
-				dump(core.settings:get_bool("enable_server")) .. "]"
-			y = y + yo
-		end
-	end
-
 	retval = retval ..
-			"button[12.05,0.05;3.075,0.8;world_home;" .. fgettext("Main Menu") .. "]" ..
-			"label[5.25,0.2;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
-			"container[5.25,4.875]" ..
-			"button[6.65,0;3.225,0.8;world_create;".. fgettext("New") .. "]"
-	if world then
-		retval = retval ..
-				"button[0,0;3.225,0.8;world_delete;".. fgettext("Delete") .. "]" ..
-				"button[3.325,0;3.225,0.8;world_configure;".. fgettext("Select Mods") .. "]"
-	end
-	retval = retval ..
-			"container_end[]" ..
-			"container[0.375,0.375]" ..
-			creative ..
-			damage ..
-			host ..
-			"container_end[]" ..
-			"container[5.25,0.375]" ..
-			"label[0,0.2;".. fgettext("Select World:") .. "]"..
-			"textlist[0,0.5;9.875,3.9;sp_worlds;" ..
+			wc_button_style("world_home,world_create,world_delete,world_configure,play", 18) ..
+			"box[4.1,1.0;10.95,5.95;#10101096]" ..
+			"box[4.45,1.75;9.6,4.0;#171616e0]" ..
+			"label[4.45,0.7;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
+			"label[4.45,1.35;" .. fgettext("Select World:") .. "]" ..
+			"textlist[4.45,1.75;9.6,4.0;sp_worlds;" ..
 			menu_render_worldlist() ..
 			";" .. index .. "]" ..
-			"container_end[]"
+			"button[15.55,0.7;2.95,0.8;world_home;" .. fgettext("Main Menu") .. "]" ..
+			"container[4.45,6.05]"
 
-	if core.settings:get_bool("enable_server") and disabled_settings["enable_server"] == nil then
+	if world then
 		retval = retval ..
-				"button[10.1875,5.925;4.9375,0.8;play;".. fgettext("Host Game") .. "]" ..
-				"container[0.375,0.375]" ..
-				"checkbox[0,"..y..";cb_server_announce;" .. fgettext("Announce Server") .. ";" ..
-				dump(core.settings:get_bool("server_announce")) .. "]"
-
-		-- Reset y so that the text fields always start at the same position,
-		-- regardless of whether some of the checkboxes are hidden.
-		y = 0.2 + 4 * yo + 0.35
-
-		retval = retval .. "field[0," .. y .. ";4.5,0.75;te_playername;" .. fgettext("Name") .. ";" ..
-				core.formspec_escape(current_name) .. "]"
-
-		y = y + 1.15 + 0.25
-
-		retval = retval .. "pwdfield[0," .. y .. ";4.5,0.75;te_passwd;" .. fgettext("Password") .. "]"
-
-		y = y + 1.15 + 0.25
-
-		local bind_addr = core.settings:get("bind_address")
-		if bind_addr ~= nil and bind_addr ~= "" then
-			retval = retval ..
-				"field[0," .. y .. ";3,0.75;te_serveraddr;" .. fgettext("Bind Address") .. ";" ..
-				core.formspec_escape(core.settings:get("bind_address")) .. "]" ..
-				"field[3.25," .. y .. ";1.25,0.75;te_serverport;" .. fgettext("Port") .. ";" ..
-				core.formspec_escape(current_port) .. "]"
-		else
-			retval = retval ..
-				"field[0," .. y .. ";4.5,0.75;te_serverport;" .. fgettext("Server Port") .. ";" ..
-				core.formspec_escape(current_port) .. "]"
-		end
-
-		retval = retval .. "container_end[]"
-	elseif world then
+				"button[0,0;2.85,0.8;world_delete;" .. fgettext("Delete") .. "]" ..
+				"button[3.05,0;3.2,0.8;world_configure;" .. fgettext("Select Mods") .. "]" ..
+				"button[6.5,0;3.1,0.8;world_create;" .. fgettext("New") .. "]" ..
+				"button[3.05,1.0;3.5,0.85;play;" .. fgettext("Play Game") .. "]"
+	else
 		retval = retval ..
-				"button[10.1875,5.925;4.9375,0.8;play;" .. fgettext("Play Game") .. "]"
+				"button[3.15,0.45;3.3,0.9;world_create;" .. fgettext("New World") .. "]"
 	end
+
+	retval = retval .. "container_end[]"
 
 	return retval
 end
@@ -370,30 +309,18 @@ local function main_button_handler(this, fields, name, tabdata)
 		if fields.mode_story then
 			set_menu_mode("story")
 			world_selector_open = true
-			local gamebar = ui.find_by_name("game_button_bar")
-			if gamebar then
-				gamebar:show()
-			end
 			return true
 		end
 
 		if fields.mode_survival then
 			set_menu_mode("survival")
 			world_selector_open = true
-			local gamebar = ui.find_by_name("game_button_bar")
-			if gamebar then
-				gamebar:show()
-			end
 			return true
 		end
 
 		if fields.mode_creative then
 			set_menu_mode("creative")
 			world_selector_open = true
-			local gamebar = ui.find_by_name("game_button_bar")
-			if gamebar then
-				gamebar:show()
-			end
 			return true
 		end
 
@@ -584,7 +511,7 @@ local function on_change(type)
 		if game then
 			apply_game(game)
 		else
-			mm_game_theme.set_engine()
+			mm_game_theme.set_engine(true)
 		end
 
 		if singleplayer_refresh_gamebar() then

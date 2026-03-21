@@ -2,9 +2,9 @@
 -- Copyright (C) 2014 sapier
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 
-MAIN_TAB_W = 15.5
-MAIN_TAB_H = 7.1
-TABHEADER_H = 0.85
+MAIN_TAB_W = 19.2
+MAIN_TAB_H = 12.0
+TABHEADER_H = 0
 GAMEBAR_H = 1.25
 GAMEBAR_OFFSET_DESKTOP = 0.375
 GAMEBAR_OFFSET_TOUCH = 0.15
@@ -42,8 +42,6 @@ dofile(menupath .. DIR_DELIM .. "dlg_server_list_mods.lua")
 dofile(menupath .. DIR_DELIM .. "dlg_manage_servers.lua")
 
 local tabs = {
-	content  = dofile(menupath .. DIR_DELIM .. "tab_content.lua"),
-	about = dofile(menupath .. DIR_DELIM .. "tab_about.lua"),
 	local_game = dofile(menupath .. DIR_DELIM .. "tab_local.lua"),
 	play_online = dofile(menupath .. DIR_DELIM .. "tab_online.lua")
 }
@@ -95,37 +93,26 @@ local function init_globals()
 	menudata.worldlist:set_sortmode("alphabetic")
 
 	mm_game_theme.init()
-	mm_game_theme.set_engine() -- This is just a fallback.
+	mm_game_theme.set_engine(true) -- Wintercraft uses a fixed launcher background.
 
 	-- Create main tabview
 	local tv_main = tabview_create("maintab", {x = MAIN_TAB_W, y = MAIN_TAB_H}, {x = 0, y = 0})
 
 	tv_main:set_autosave_tab(true)
+	tv_main:set_show_tab_header(false)
+	tv_main:set_show_background_box(false)
 	tv_main:add(tabs.local_game)
 	tv_main:add(tabs.play_online)
-	tv_main:add(tabs.content)
-	tv_main:add(tabs.about)
 
 	tv_main:set_global_event_handler(main_event_handler)
 	tv_main:set_fixed_size(false)
 
 	local last_tab = core.settings:get("maintab_LAST")
-	if last_tab and tv_main.current_tab ~= last_tab then
+	if (last_tab == "local" or last_tab == "online") and tv_main.current_tab ~= last_tab then
 		tv_main:set_tab(last_tab)
+	else
+		tv_main:set_tab("local")
 	end
-
-	tv_main:set_end_button({
-		icon = defaulttexturedir .. "settings_btn.png",
-		label = fgettext("Settings"),
-		name = "open_settings",
-		on_click = function(tabview)
-			local dlg = create_settings_dlg()
-			dlg:set_parent(tabview)
-			tabview:hide()
-			dlg:show()
-			return true
-		end,
-	})
 
 	ui.set_default("maintab")
 	tv_main:show()
