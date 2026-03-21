@@ -42,10 +42,14 @@ local function get_sorted_servers()
 	return servers
 end
 
-local function wc_button_style(names, font_size)
-	return "style[" .. names .. ";bgcolor=#514b46e0;bgcolor_hovered=#6b635de0;" ..
-		"bgcolor_pressed=#3b3633ff;border=true;font_size=" .. font_size ..
-		";textcolor=#f2f0ed]"
+local function wc_texture(name)
+	return core.formspec_escape(defaulttexturedir .. name)
+end
+
+local function wc_action_button(id, name, x, y, w, h)
+	return "image_button[" .. x .. "," .. y .. ";" .. w .. "," .. h .. ";" ..
+		wc_texture("wintercraft_btn_" .. id .. "_1.png") .. ";" .. name ..
+		";;true;false;" .. wc_texture("wintercraft_btn_" .. id .. "_2.png") .. "]"
 end
 
 local function is_selected_fav(server)
@@ -103,14 +107,16 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	local retval =
-		wc_button_style("btn_main_menu,btn_mp_login,btn_mp_register,btn_my_servers,btn_create_server", 17) ..
-		"box[0.15,0.15;9.45,6.95;#10101096]" ..
-		"box[9.85,0.15;5.85,6.95;#10101096]" ..
+		"bgcolor[#ffffff00;false]" ..
+		"image[0.55,1.35;9.25,7.05;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
+		"image[10.15,1.35;5.6,7.05;" .. wc_texture("wintercraft_panel_tall.png") .. "]" ..
+		"image[16.05,1.75;2.9,2.85;" .. wc_texture("wintercraft_servers_button1.png") .. "]" ..
+		wc_action_button("main_menu", "btn_main_menu", 16.22, 5.08, 2.58, 0.64) ..
 		-- Search
-		"field[0.25,0.25;7,0.75;te_search;;" .. core.formspec_escape(tabdata.search_for) .. "]" ..
+		"field[0.95,2.03;6.45,0.75;te_search;;" .. core.formspec_escape(tabdata.search_for) .. "]" ..
 		"tooltip[te_search;" .. fgettext("Possible filters\ngame:<name>\nmod:<name>\nplayer:<name>") .. "]" ..
 		"field_enter_after_edit[te_search;true]" ..
-		"container[7.25,0.25]" ..
+		"container[7.55,2.03]" ..
 		"image_button[0,0;0.75,0.75;" .. core.formspec_escape(defaulttexturedir .. "search.png") .. ";btn_mp_search;]" ..
 		"image_button[0.75,0;0.75,0.75;" .. core.formspec_escape(defaulttexturedir .. "clear.png") .. ";btn_mp_clear;]" ..
 		"image_button[1.5,0;0.75,0.75;" .. core.formspec_escape(defaulttexturedir .. "refresh.png") .. ";btn_mp_refresh;]" ..
@@ -118,46 +124,48 @@ local function get_formspec(tabview, name, tabdata)
 		"tooltip[btn_mp_search;" .. fgettext("Search") .. "]" ..
 		"tooltip[btn_mp_refresh;" .. fgettext("Refresh") .. "]" ..
 		"container_end[]" ..
-		"button[15.95,0.25;2.85,0.75;btn_main_menu;" .. fgettext("Main Menu") .. "]" ..
 
-		"container[10.0,0.25]" ..
-		"box[0,0;5.45,6.45;#66666655]" ..
+		"container[10.45,1.95]" ..
+		"box[0.15,1.45;5.1,2.35;#999999]" ..
 
 		-- Address / Port
-		"label[0.25,0.35;" .. fgettext("Address") .. "]" ..
-		"label[4.25,0.35;" .. fgettext("Port") .. "]" ..
-		"field[0.25,0.5;4,0.75;te_address;;" ..
+		"label[0.15,0.05;" .. fgettext("Address") .. "]" ..
+		"label[4.1,0.05;" .. fgettext("Port") .. "]" ..
+		"field[0.15,0.25;3.95,0.75;te_address;;" ..
 			core.formspec_escape(core.settings:get("address")) .. "]" ..
-		"field[4.25,0.5;1.25,0.75;te_port;;" ..
+		"field[4.1,0.25;1.15,0.75;te_port;;" ..
 			core.formspec_escape(core.settings:get("remote_port")) .. "]" ..
 
 		-- Description Background
-		"label[0.25,1.6;" .. fgettext("Server Description") .. "]" ..
-		"box[0.25,1.85;5.25,2.7;#999999]"..
+		"label[0.15,1.15;" .. fgettext("Server Description") .. "]" ..
 
 		-- Name / Password
-		"container[0,4.8]" ..
-		"label[0.25,0;" .. fgettext("Name") .. "]" ..
-		"label[2.875,0;" .. fgettext("Password") .. "]" ..
-		"field[0.25,0.2;2.625,0.75;te_name;;" .. core.formspec_escape(core.settings:get("name")) .. "]" ..
-		"pwdfield[2.875,0.2;2.625,0.75;te_pwd;]" ..
+		"container[0,3.95]" ..
+		"label[0.15,0.25;" .. fgettext("Name") .. "]" ..
+		"label[2.95,0.25;" .. fgettext("Password") .. "]" ..
+		"field[0.15,0.5;2.7,0.75;te_name;;" .. core.formspec_escape(core.settings:get("name")) .. "]" ..
+		"pwdfield[2.95,0.5;2.3,0.75;te_pwd;]" ..
 		"container_end[]" ..
 
-		-- Connect
-		"button[3,5.95;2.45,0.7;btn_mp_login;" .. fgettext("Login") .. "]" ..
-		"button[0.25,6.2;2.45,0.6;btn_my_servers;" .. fgettext("My Servers") .. "]" ..
-		"button[3,6.2;2.45,0.6;btn_create_server;" .. fgettext("Create Server") .. "]"
-
 	if core.settings:get_bool("enable_split_login_register") then
-		retval = retval .. "button[0.25,5.95;2.45,0.7;btn_mp_register;" .. fgettext("Register") .. "]"
+		retval = retval ..
+			wc_action_button("register", "btn_mp_register", 0.15, 5.05, 2.45, 0.58) ..
+			wc_action_button("login", "btn_mp_login", 3.1, 5.05, 2.15, 0.58)
+	else
+		retval = retval ..
+			wc_action_button("login", "btn_mp_login", 1.55, 5.05, 2.15, 0.58)
 	end
+
+	retval = retval ..
+		wc_action_button("my_servers", "btn_my_servers", 0.15, 5.72, 2.45, 0.52) ..
+		wc_action_button("create_server", "btn_create_server", 3.1, 5.72, 2.15, 0.52)
 
 	local selected_server = find_selected_server()
 
 	if selected_server then
 		gamedata.serverdescription = selected_server.description
 		if gamedata.serverdescription then
-			retval = retval .. "textarea[0.25,1.85;5.25,2.7;;;" ..
+			retval = retval .. "textarea[0.15,1.45;5.1,2.35;;;" ..
 				core.formspec_escape(gamedata.serverdescription) .. "]"
 		end
 
@@ -173,10 +181,10 @@ local function get_formspec(tabview, name, tabdata)
 			retval = retval ..
 				"tooltip[btn_view_mods;" .. tooltip .. "]" ..
 				"style[btn_view_mods;padding=6]" ..
-				"image_button[4,1.3;0.5,0.5;" .. core.formspec_escape(defaulttexturedir ..
+				"image_button[3.7,1.3;0.5,0.5;" .. core.formspec_escape(defaulttexturedir ..
 				"server_view_mods.png") .. ";btn_view_mods;]"
 		else
-			retval = retval .. "image[4.1,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
+			retval = retval .. "image[3.8,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
 				"server_view_mods_unavailable.png") .. "]"
 		end
 
@@ -196,10 +204,10 @@ local function get_formspec(tabview, name, tabdata)
 						fgettext("Players:\n$1", table.concat(clients_list, "\n")) .. "]"
 			end
 			retval = retval .. "style[btn_view_clients;padding=6]"
-			retval = retval .. "image_button[4.5,1.3;0.5,0.5;" .. core.formspec_escape(defaulttexturedir ..
+			retval = retval .. "image_button[4.2,1.3;0.5,0.5;" .. core.formspec_escape(defaulttexturedir ..
 				"server_view_clients.png") .. ";btn_view_clients;]"
 		else
-			retval = retval .. "image[4.6,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
+			retval = retval .. "image[4.3,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
 				"server_view_clients_unavailable.png") .. "]"
 		end
 
@@ -207,10 +215,10 @@ local function get_formspec(tabview, name, tabdata)
 		if selected_server.url then
 			retval = retval .. "tooltip[btn_server_url;" .. fgettext("Open server website") .. "]"
 			retval = retval .. "style[btn_server_url;padding=6]"
-			retval = retval .. "image_button[3.5,1.3;0.5,0.5;" ..
+			retval = retval .. "image_button[3.2,1.3;0.5,0.5;" ..
 				core.formspec_escape(defaulttexturedir .. "server_url.png") .. ";btn_server_url;]"
 		else
-			retval = retval .. "image[3.6,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
+			retval = retval .. "image[3.3,1.4;0.3,0.3;" .. core.formspec_escape(defaulttexturedir ..
 				"server_url_unavailable.png") .. "]"
 		end
 
@@ -218,12 +226,12 @@ local function get_formspec(tabview, name, tabdata)
 		if is_selected_fav() then
 			retval = retval .. "tooltip[btn_delete_favorite;" .. fgettext("Remove favorite") .. "]"
 			retval = retval .. "style[btn_delete_favorite;padding=6]"
-			retval = retval .. "image_button[5,1.3;0.5,0.5;" ..
+			retval = retval .. "image_button[4.7,1.3;0.5,0.5;" ..
 				core.formspec_escape(defaulttexturedir .. "server_favorite_delete.png") .. ";btn_delete_favorite;]"
 		else
 			retval = retval .. "tooltip[btn_add_favorite;" .. fgettext("Add favorite") .. "]"
 			retval = retval .. "style[btn_add_favorite;padding=6]"
-			retval = retval .. "image_button[5,1.3;0.5,0.5;" ..
+			retval = retval .. "image_button[4.7,1.3;0.5,0.5;" ..
 				core.formspec_escape(defaulttexturedir .. "server_favorite.png") .. ";btn_add_favorite;]"
 		end
 	end
@@ -257,7 +265,7 @@ local function get_formspec(tabview, name, tabdata)
 		"align=inline,padding=0.25,width=1.5;" ..
 		"color,align=inline,span=1;" ..
 		"text,align=inline,padding=1]" ..
-		"table[0.25,1;9.25,5.8;servers;"
+		"table[0.95,2.95;8.45,5.25;servers;"
 
 	local servers = get_sorted_servers()
 

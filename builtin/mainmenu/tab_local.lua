@@ -45,10 +45,20 @@ local function wc_texture(name)
 	return core.formspec_escape(defaulttexturedir .. name)
 end
 
-local function wc_button_style(names, font_size)
-	return "style[" .. names .. ";bgcolor=#514b46e0;bgcolor_hovered=#6b635de0;" ..
-		"bgcolor_pressed=#3b3633ff;border=true;font_size=" .. font_size ..
-		";textcolor=#f2f0ed]"
+local MODE_CARD_TEXTURES = {
+	story = "wintercraft_story_button1.png",
+	survival = "wintercraft_survival_button1.png",
+	creative = "wintercraft_creative_button1.png",
+}
+
+local function wc_mode_card(mode)
+	return wc_texture(MODE_CARD_TEXTURES[mode] or MODE_CARD_TEXTURES.survival)
+end
+
+local function wc_action_button(id, name, x, y, w, h)
+	return "image_button[" .. x .. "," .. y .. ";" .. w .. "," .. h .. ";" ..
+		wc_texture("wintercraft_btn_" .. id .. "_1.png") .. ";" .. name ..
+		";;true;false;" .. wc_texture("wintercraft_btn_" .. id .. "_2.png") .. "]"
 end
 
 local function set_menu_mode(mode)
@@ -247,39 +257,28 @@ local function get_formspec(tabview, name, tabdata)
 	-- When changing tabs to a world list with fewer entries, the last index is selected (visually).
 	-- However, the formspec fields lag behind, thus 'index > #list' can be a valid choice.
 	local world = list and list[math.min(index, #list)]
-	local game
-
-	if world then
-		game = pkgmgr.find_by_gameid(world.gameid)
-	else
-		game = current_game()
-	end
-	local disabled_settings = get_disabled_settings(game)
 
 	retval = retval ..
-			wc_button_style("world_home,world_create,world_delete,world_configure,play", 18) ..
-			"box[4.1,1.0;10.95,5.95;#10101096]" ..
-			"box[4.45,1.75;9.6,4.0;#171616e0]" ..
-			"label[4.45,0.7;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
-			"label[4.45,1.35;" .. fgettext("Select World:") .. "]" ..
-			"textlist[4.45,1.75;9.6,4.0;sp_worlds;" ..
+			"bgcolor[#ffffff00;false]" ..
+			"image[1.2,2.05;3.15,3.1;" .. wc_mode_card(selected_mode) .. "]" ..
+			wc_action_button("main_menu", "world_home", 1.5, 5.55, 2.55, 0.64) ..
+			"image[4.55,1.75;10.8,6.1;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
+			"label[5.15,2.12;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
+			"label[5.15,2.52;" .. fgettext("Select World:") .. "]" ..
+			"textlist[5.15,2.9;9.6,3.35;sp_worlds;" ..
 			menu_render_worldlist() ..
-			";" .. index .. "]" ..
-			"button[15.55,0.7;2.95,0.8;world_home;" .. fgettext("Main Menu") .. "]" ..
-			"container[4.45,6.05]"
+			";" .. index .. "]"
 
 	if world then
 		retval = retval ..
-				"button[0,0;2.85,0.8;world_delete;" .. fgettext("Delete") .. "]" ..
-				"button[3.05,0;3.2,0.8;world_configure;" .. fgettext("Select Mods") .. "]" ..
-				"button[6.5,0;3.1,0.8;world_create;" .. fgettext("New") .. "]" ..
-				"button[3.05,1.0;3.5,0.85;play;" .. fgettext("Play Game") .. "]"
+				wc_action_button("delete", "world_delete", 5.15, 6.52, 2.75, 0.68) ..
+				wc_action_button("select_mods", "world_configure", 8.1, 6.52, 3.15, 0.68) ..
+				wc_action_button("new", "world_create", 11.45, 6.52, 2.75, 0.68) ..
+				wc_action_button("play_game", "play", 8.2, 7.28, 3.15, 0.7)
 	else
 		retval = retval ..
-				"button[3.15,0.45;3.3,0.9;world_create;" .. fgettext("New World") .. "]"
+				wc_action_button("new_world", "world_create", 8.1, 6.92, 3.35, 0.72)
 	end
-
-	retval = retval .. "container_end[]"
 
 	return retval
 end
