@@ -122,7 +122,7 @@ local function get_formspec(tabview, name, tabdata)
 		"image[0.55,1.25;9.25,7.38;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
 		"image[10.15,1.25;5.6,7.58;" .. wc_texture("wintercraft_panel_tall.png") .. "]" ..
 		"image[16.05,1.62;2.9,2.85;" .. wc_texture("wintercraft_servers_button1.png") .. "]" ..
-		wc_action_button("main_menu", "btn_main_menu", 15.98, 5.02, nil, 0.64) ..
+		wc_action_button("main_menu", "btn_main_menu", 16.12, 5.08, nil, 0.58) ..
 		-- Search
 		"field[0.95,1.93;6.45,0.75;te_search;;" .. core.formspec_escape(tabdata.search_for) .. "]" ..
 		"tooltip[te_search;" .. fgettext("Possible filters\ngame:<name>\nmod:<name>\nplayer:<name>") .. "]" ..
@@ -160,16 +160,16 @@ local function get_formspec(tabview, name, tabdata)
 
 	if core.settings:get_bool("enable_split_login_register") then
 		retval = retval ..
-			wc_action_button("register", "btn_mp_register", 0.15, 4.96, nil, 0.58) ..
-			wc_action_button("login", "btn_mp_login", 2.98, 4.96, nil, 0.58)
+			wc_action_button("register", "btn_mp_register", 0.18, 4.98, nil, 0.54) ..
+			wc_action_button("login", "btn_mp_login", 3.0, 4.98, nil, 0.54)
 	else
 		retval = retval ..
-			wc_action_button("login", "btn_mp_login", 1.53, 4.96, nil, 0.58)
+			wc_action_button("login", "btn_mp_login", 1.58, 4.98, nil, 0.54)
 	end
 
 	retval = retval ..
-		wc_action_button("my_servers", "btn_my_servers", 1.37, 5.62, nil, 0.52) ..
-		wc_action_button("create_server", "btn_create_server", 1.25, 6.24, nil, 0.52)
+		wc_action_button("my_servers", "btn_my_servers", 1.42, 5.64, nil, 0.5) ..
+		wc_action_button("create_server", "btn_create_server", 1.31, 6.24, nil, 0.5)
 
 	local selected_server = find_selected_server()
 
@@ -556,23 +556,19 @@ local function main_button_handler(tabview, fields, name, tabdata)
 	end
 
 	if fields.btn_create_server then
-		local address = (fields.te_address or ""):trim()
-		local te_port_number = tonumber((fields.te_port or ""):match("^%s*(%d+)%s*$"))
-		if address == "" or not te_port_number or te_port_number < 1 or te_port_number > 65535 then
-			local dlg = messagebox("dlg_create_server_error",
-				fgettext("Enter a valid address and port before creating a server."))
-			dlg:set_parent(tabview)
-			tabview:hide()
-			dlg:show()
-			return true
-		end
-
-		serverlistmgr.add_favorite({
+		local address = (fields.te_address or core.settings:get("address") or ""):trim()
+		local te_port_number = tonumber((fields.te_port or core.settings:get("remote_port") or "30000"):match("^%s*(%d+)%s*$")) or 30000
+		local profile = address ~= "" and wintercraft_get_server_profile(address, te_port_number) or nil
+		local dlg = create_server_setup_dialog({
 			address = address,
 			port = te_port_number,
+			server_name = profile and profile.name or "",
+			admin_name = profile and profile.admin_name or (fields.te_name or core.settings:get("name") or ""),
+			admin_password = profile and profile.admin_password or "",
 		})
-		core.settings:set("address", address)
-		core.settings:set("remote_port", te_port_number)
+		dlg:set_parent(tabview)
+		tabview:hide()
+		dlg:show()
 		return true
 	end
 

@@ -28,6 +28,7 @@ LABELS = {
     "save": "SAVE",
     "use": "USE",
     "close": "CLOSE",
+    "create": "CREATE",
 }
 
 MIN_WIDTHS = {
@@ -44,6 +45,7 @@ MIN_WIDTHS = {
     "save": 165,
     "use": 165,
     "close": 175,
+    "create": 180,
 }
 
 

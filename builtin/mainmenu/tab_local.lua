@@ -273,7 +273,7 @@ local function get_formspec(tabview, name, tabdata)
 	retval = retval ..
 			"bgcolor[#ffffff00;false]" ..
 			"image[1.1,2.02;3.15,3.1;" .. wc_mode_card(selected_mode) .. "]" ..
-			wc_action_button("main_menu", "world_home", 1.42, 5.56, nil, 0.64) ..
+			wc_action_button("main_menu", "world_home", 1.47, 5.56, nil, 0.56) ..
 			"image[4.42,1.72;10.92,6.15;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
 			"label[5.08,2.1;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
 			"label[5.08,2.48;" .. fgettext("Select World:") .. "]" ..
@@ -283,13 +283,13 @@ local function get_formspec(tabview, name, tabdata)
 
 	if world then
 		retval = retval ..
-				wc_action_button("delete", "world_delete", 5.08, 6.54, nil, 0.68) ..
-				wc_action_button("select_mods", "world_configure", 8.02, 6.54, nil, 0.68) ..
-				wc_action_button("new", "world_create", 11.83, 6.54, nil, 0.68) ..
-				wc_action_button("play_game", "play", 8.11, 7.32, nil, 0.72)
+				wc_action_button("delete", "world_delete", 5.74, 6.56, nil, 0.6) ..
+				wc_action_button("select_mods", "world_configure", 8.42, 6.56, nil, 0.6) ..
+				wc_action_button("new", "world_create", 11.79, 6.56, nil, 0.6) ..
+				wc_action_button("play_game", "play", 8.3, 7.18, nil, 0.64)
 	else
 		retval = retval ..
-				wc_action_button("new_world", "world_create", 8.15, 6.94, nil, 0.72)
+				wc_action_button("new_world", "world_create", 8.37, 6.92, nil, 0.64)
 	end
 
 	return retval
