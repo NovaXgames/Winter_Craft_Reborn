@@ -51,11 +51,23 @@ local MODE_CARD_TEXTURES = {
 	creative = "wintercraft_creative_button1.png",
 }
 
+local WC_ACTION_ASPECTS = {
+	main_menu = 205 / 44,
+	delete = 180 / 44,
+	select_mods = 230 / 44,
+	new = 165 / 44,
+	new_world = 210 / 44,
+	play_game = 220 / 44,
+}
+
 local function wc_mode_card(mode)
 	return wc_texture(MODE_CARD_TEXTURES[mode] or MODE_CARD_TEXTURES.survival)
 end
 
 local function wc_action_button(id, name, x, y, w, h)
+	if w == nil then
+		w = (WC_ACTION_ASPECTS[id] or (175 / 44)) * h
+	end
 	return "image_button[" .. x .. "," .. y .. ";" .. w .. "," .. h .. ";" ..
 		wc_texture("wintercraft_btn_" .. id .. "_1.png") .. ";" .. name ..
 		";;true;false;" .. wc_texture("wintercraft_btn_" .. id .. "_2.png") .. "]"
@@ -260,24 +272,24 @@ local function get_formspec(tabview, name, tabdata)
 
 	retval = retval ..
 			"bgcolor[#ffffff00;false]" ..
-			"image[1.2,2.05;3.15,3.1;" .. wc_mode_card(selected_mode) .. "]" ..
-			wc_action_button("main_menu", "world_home", 1.5, 5.55, 2.55, 0.64) ..
-			"image[4.55,1.75;10.8,6.1;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
-			"label[5.15,2.12;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
-			"label[5.15,2.52;" .. fgettext("Select World:") .. "]" ..
-			"textlist[5.15,2.9;9.6,3.35;sp_worlds;" ..
+			"image[1.1,2.02;3.15,3.1;" .. wc_mode_card(selected_mode) .. "]" ..
+			wc_action_button("main_menu", "world_home", 1.42, 5.56, nil, 0.64) ..
+			"image[4.42,1.72;10.92,6.15;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
+			"label[5.08,2.1;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
+			"label[5.08,2.48;" .. fgettext("Select World:") .. "]" ..
+			"textlist[5.08,2.86;9.68,3.42;sp_worlds;" ..
 			menu_render_worldlist() ..
 			";" .. index .. "]"
 
 	if world then
 		retval = retval ..
-				wc_action_button("delete", "world_delete", 5.15, 6.52, 2.75, 0.68) ..
-				wc_action_button("select_mods", "world_configure", 8.1, 6.52, 3.15, 0.68) ..
-				wc_action_button("new", "world_create", 11.45, 6.52, 2.75, 0.68) ..
-				wc_action_button("play_game", "play", 8.2, 7.28, 3.15, 0.7)
+				wc_action_button("delete", "world_delete", 5.08, 6.54, nil, 0.68) ..
+				wc_action_button("select_mods", "world_configure", 8.02, 6.54, nil, 0.68) ..
+				wc_action_button("new", "world_create", 11.83, 6.54, nil, 0.68) ..
+				wc_action_button("play_game", "play", 8.11, 7.32, nil, 0.72)
 	else
 		retval = retval ..
-				wc_action_button("new_world", "world_create", 8.1, 6.92, 3.35, 0.72)
+				wc_action_button("new_world", "world_create", 8.15, 6.94, nil, 0.72)
 	end
 
 	return retval
