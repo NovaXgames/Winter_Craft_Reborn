@@ -5,6 +5,7 @@
 local HOSTING_API_URL_SETTING = "wintercraft_hosting_api_url"
 local HOSTING_API_TOKEN_SETTING = "wintercraft_hosting_api_token"
 local HOSTING_PUBLIC_HOST_SETTING = "wintercraft_hosting_public_host"
+local ACCOUNT_TOKEN_SETTING = "wintercraft_account_token"
 local DEFAULT_HOSTING_TIMEOUT = 10
 
 local function as_trimmed_string(value)
@@ -51,7 +52,13 @@ local function build_headers(send_json)
 		headers[#headers + 1] = "Content-Type: application/json"
 	end
 
-	local token = as_trimmed_string(core.settings:get(HOSTING_API_TOKEN_SETTING))
+	local token = as_trimmed_string(core.settings:get(ACCOUNT_TOKEN_SETTING))
+	if token == "" and wintercraft_account_get_token then
+		token = as_trimmed_string(wintercraft_account_get_token())
+	end
+	if token == "" then
+		token = as_trimmed_string(core.settings:get(HOSTING_API_TOKEN_SETTING))
+	end
 	if token ~= "" then
 		headers[#headers + 1] = "Authorization: Bearer " .. token
 	end
@@ -214,6 +221,13 @@ local function request_hosting(method, endpoint, data, fallback_endpoint)
 end
 
 function wintercraft_hosting_get_api_url()
+	if wintercraft_get_api_url then
+		local api_url = wintercraft_get_api_url()
+		if api_url ~= "" then
+			return api_url
+		end
+	end
+
 	return normalize_api_url(core.settings:get(HOSTING_API_URL_SETTING))
 end
 

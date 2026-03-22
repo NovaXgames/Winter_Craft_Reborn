@@ -130,39 +130,39 @@ local function server_formspec(dialogdata)
 	local error_text = dialogdata.error_text or ""
 	local host_address = selected.host_address ~= "" and selected.host_address or wintercraft_hosting_get_target_label()
 	local host_hint = wintercraft_hosting_is_configured() and
-		fgettext("These servers are provisioned through the external Wintercraft host.") or
-		fgettext("Set the hosting API URL in Settings to sync with the external host.")
+		fgettext("These servers belong to your Wintercraft account.") or
+		fgettext("Set the Wintercraft API URL in Settings first.")
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[13.8,9.0]",
+		"size[14.2,9.15]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.7,0.8;4.25,7.75;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"image[5.08,0.8;7.95,7.75;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"image[0.7,0.8;4.45,7.9;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"image[5.28,0.8;8.15,7.9;", wc_texture("wintercraft_panel_tall.png"), "]",
 		"label[1.05,1.08;", fgettext("Hosted Servers"), "]",
-		"image_button[3.9,0.98;0.58,0.58;", core.formspec_escape(defaulttexturedir .. "refresh.png"), ";sv_refresh;]",
+		"image_button[4.08,0.98;0.58,0.58;", core.formspec_escape(defaulttexturedir .. "refresh.png"), ";sv_refresh;]",
 		"tooltip[sv_refresh;", fgettext("Sync hosted servers"), "]",
-		"textlist[1.05,1.62;3.55,5.95;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
-		wc_action_button("new", "sv_new", 1.0, 7.83, nil, 0.64),
-		wc_action_button("delete", "sv_delete", 2.95, 7.83, nil, 0.64),
-		"label[5.45,1.08;", fgettext("Hosted On"), "]",
-		"box[5.45,1.42;6.25,0.52;#151515aa]",
-		"label[7.25,1.55;", core.formspec_escape(host_address), "]",
-		"label[5.45,2.22;", fgettext("Server Name"), "]",
-		"field[5.45,2.52;6.25,0.8;sv_name;;", core.formspec_escape(name), "]",
-		"label[5.45,3.28;", fgettext("Description"), "]",
-		"textarea[5.45,3.58;6.25,1.85;sv_description;;", core.formspec_escape(description), "]",
-		"label[5.45,5.66;", fgettext("Admin Name"), "]",
-		"field[5.45,5.96;2.85,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
-		"label[8.65,5.66;", fgettext("Admin Password"), "]",
-		"field[8.65,5.96;3.05,0.8;sv_admin_password;;", core.formspec_escape(admin_password), "]",
+		"textlist[1.05,1.62;3.75,6.08;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
+		wc_action_button("new", "sv_new", 0.98, 8.02, nil, 0.64),
+		wc_action_button("delete", "sv_delete", 2.95, 8.02, nil, 0.64),
+		"label[5.65,1.08;", fgettext("Hosted On"), "]",
+		"box[5.65,1.42;6.45,0.52;#151515aa]",
+		"label[7.52,1.55;", core.formspec_escape(host_address), "]",
+		"label[5.65,2.15;", fgettext("Server Name"), "]",
+		"field[5.65,2.45;6.45,0.8;sv_name;;", core.formspec_escape(name), "]",
+		"label[5.65,3.16;", fgettext("Description"), "]",
+		"textarea[5.65,3.46;6.45,1.98;sv_description;;", core.formspec_escape(description), "]",
+		"label[5.65,5.62;", fgettext("Admin Name"), "]",
+		"field[5.65,5.92;2.95,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
+		"label[8.98,5.62;", fgettext("Admin Password"), "]",
+		"field[8.98,5.92;3.12,0.8;sv_admin_password;;", core.formspec_escape(admin_password), "]",
 		"style[sv_hint;textcolor=#bdb7b0;border=false]",
-		"button[5.45,6.78;6.25,0.58;sv_hint;", core.formspec_escape(host_hint), "]",
+		"button[5.65,6.74;6.45,0.58;sv_hint;", core.formspec_escape(host_hint), "]",
 		"style[sv_error;textcolor=#ff8d8d;border=false]",
-		"button[5.45,7.4;6.25,0.58;sv_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("save", "sv_save", 5.45, 7.83, nil, 0.64),
-		wc_action_button("use", "sv_use", 7.88, 7.83, nil, 0.64),
-		wc_action_button("close", "quit", 10.28, 7.83, nil, 0.64),
+		"button[5.65,7.36;6.45,0.58;sv_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("save", "sv_save", 5.65, 8.02, nil, 0.64),
+		wc_action_button("use", "sv_use", 8.08, 8.02, nil, 0.64),
+		wc_action_button("close", "quit", 10.58, 8.02, nil, 0.64),
 	})
 end
 

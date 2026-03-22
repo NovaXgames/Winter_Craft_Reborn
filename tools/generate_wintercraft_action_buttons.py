@@ -15,6 +15,7 @@ BASE_IMAGES = {
 }
 
 LABELS = {
+    "account": "ACCOUNT",
     "main_menu": "MAIN MENU",
     "delete": "DELETE",
     "select_mods": "SELECT MODS",
@@ -29,9 +30,11 @@ LABELS = {
     "use": "USE",
     "close": "CLOSE",
     "create": "CREATE",
+    "logout": "LOGOUT",
 }
 
 MIN_WIDTHS = {
+    "account": 195,
     "main_menu": 205,
     "delete": 180,
     "select_mods": 230,
@@ -46,6 +49,11 @@ MIN_WIDTHS = {
     "use": 165,
     "close": 175,
     "create": 180,
+    "logout": 185,
+}
+
+HOME_BUTTONS = {
+    "wintercraft_account_button": "ACCOUNT",
 }
 
 
@@ -102,6 +110,11 @@ def main() -> None:
             image = build_blank_button(base, widths[button_id])
             draw_label(image, label, font)
             image.save(TEXTURE_DIR / f"wintercraft_btn_{button_id}_{state}.png")
+
+        for output_name, label in HOME_BUTTONS.items():
+            home_button = base.copy()
+            draw_label(home_button, label, font)
+            home_button.save(TEXTURE_DIR / f"{output_name}{state}.png")
 
     for button_id in sorted(widths):
         print(f"{button_id}: {widths[button_id]}/44")

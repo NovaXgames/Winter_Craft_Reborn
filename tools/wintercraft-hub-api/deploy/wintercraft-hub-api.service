@@ -1,0 +1,16 @@
+[Unit]
+Description=Wintercraft Hub API
+After=network.target
+
+[Service]
+Type=simple
+User=vlad
+Group=vlad
+WorkingDirectory=/home/vlad/apps/wintercraft-hub-api
+EnvironmentFile=/home/vlad/apps/wintercraft-hub-api/.env
+ExecStart=/home/vlad/apps/wintercraft-hub-api/.venv/bin/uvicorn app.main:app --host ${WINTERCRAFT_API_HOST} --port ${WINTERCRAFT_API_PORT}
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

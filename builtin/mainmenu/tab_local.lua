@@ -222,6 +222,7 @@ local function get_disabled_settings(game)
 end
 
 local function get_home_formspec()
+	local status_text = wintercraft_account_get_status_text and wintercraft_account_get_status_text() or ""
 	return table.concat({
 		"bgcolor[#ffffff00;false]",
 		"image[3.2,0.65;12.8,2.02;" .. wc_texture("wintercraft_logo_menu.png") .. "]",
@@ -233,8 +234,11 @@ local function get_home_formspec()
 			";mode_creative;;true;false;" .. wc_texture("wintercraft_creative_button2.png") .. "]",
 		"image_button[13.91,3.85;3.48,3.432;" .. wc_texture("wintercraft_servers_button1.png") ..
 			";mode_servers;;true;false;" .. wc_texture("wintercraft_servers_button2.png") .. "]",
-		"image_button[7.5,9.25;4.2,1.056;" .. wc_texture("wintercraft_settings_button1.png") ..
+		"image_button[5.22,9.25;4.2,1.056;" .. wc_texture("wintercraft_account_button1.png") ..
+			";open_account;;true;false;" .. wc_texture("wintercraft_account_button2.png") .. "]",
+		"image_button[9.78,9.25;4.2,1.056;" .. wc_texture("wintercraft_settings_button1.png") ..
 			";open_settings;;true;false;" .. wc_texture("wintercraft_settings_button2.png") .. "]",
+		"label[7.04,8.78;" .. core.formspec_escape(status_text) .. "]",
 	})
 end
 
@@ -272,24 +276,24 @@ local function get_formspec(tabview, name, tabdata)
 
 	retval = retval ..
 			"bgcolor[#ffffff00;false]" ..
-			"image[1.12,1.95;3.08,3.03;" .. wc_mode_card(selected_mode) .. "]" ..
-			wc_action_button("main_menu", "world_home", 1.45, 5.34, nil, 0.6) ..
-			"image[4.18,1.7;10.98,6.1;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
-			"label[4.88,2.05;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
-			"label[4.88,2.4;" .. fgettext("Select World:") .. "]" ..
-			"textlist[4.88,2.78;9.72,3.54;sp_worlds;" ..
+			"image[1.14,1.9;3.16,3.11;" .. wc_mode_card(selected_mode) .. "]" ..
+			wc_action_button("main_menu", "world_home", 1.4, 5.42, nil, 0.62) ..
+			"image[4.08,1.64;11.15,6.22;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
+			"label[4.78,2.0;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
+			"label[4.78,2.35;" .. fgettext("Select World:") .. "]" ..
+			"textlist[4.78,2.72;9.82,3.64;sp_worlds;" ..
 			menu_render_worldlist() ..
 			";" .. index .. "]"
 
 	if world then
 		retval = retval ..
-				wc_action_button("delete", "world_delete", 5.42, 6.4, nil, 0.62) ..
-				wc_action_button("select_mods", "world_configure", 8.16, 6.4, nil, 0.62) ..
-				wc_action_button("new", "world_create", 11.48, 6.4, nil, 0.62) ..
-				wc_action_button("play_game", "play", 8.0, 7.04, nil, 0.66)
+				wc_action_button("delete", "world_delete", 5.2, 6.48, nil, 0.66) ..
+				wc_action_button("select_mods", "world_configure", 8.0, 6.48, nil, 0.66) ..
+				wc_action_button("new", "world_create", 11.4, 6.48, nil, 0.66) ..
+				wc_action_button("play_game", "play", 7.9, 7.18, nil, 0.7)
 	else
 		retval = retval ..
-				wc_action_button("new_world", "world_create", 8.02, 6.76, nil, 0.66)
+				wc_action_button("new_world", "world_create", 7.86, 6.88, nil, 0.7)
 	end
 
 	return retval
@@ -311,6 +315,14 @@ local function main_button_handler(this, fields, name, tabdata)
 	if not world_selector_open then
 		if fields.open_settings then
 			local dlg = create_settings_dlg()
+			dlg:set_parent(this)
+			this:hide()
+			dlg:show()
+			return true
+		end
+
+		if fields.open_account then
+			local dlg = create_account_dialog()
 			dlg:set_parent(this)
 			this:hide()
 			dlg:show()

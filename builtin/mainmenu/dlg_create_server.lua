@@ -26,36 +26,36 @@ local function create_server_formspec(dialogdata)
 	local host_address = dialogdata.host_address ~= "" and dialogdata.host_address or wintercraft_hosting_get_target_label()
 	local hint_text
 	if wintercraft_hosting_is_configured() then
-		hint_text = fgettext("This server will be created on the external Wintercraft host.")
+		hint_text = fgettext("This server will be created on the Wintercraft host.")
 	else
-		hint_text = fgettext("Set the hosting API URL in Settings to provision on the external host.")
+		hint_text = fgettext("Set the Wintercraft API URL in Settings first.")
 	end
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[12.9,8.4]",
+		"size[13.2,8.55]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.85,1.95;2.2,2.16;", wc_texture("wintercraft_servers_button1.png"), "]",
-		"image[3.2,0.78;8.9,7.22;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"label[3.62,1.1;", fgettext("Create Hosted Server"), "]",
-		"label[3.62,1.5;", fgettext("Hosted On"), "]",
-		"box[3.62,1.82;5.95,0.5;#151515aa]",
-		"label[4.85,1.95;", core.formspec_escape(host_address), "]",
-		"label[3.62,2.62;", fgettext("Server Name"), "]",
-		"field[3.62,2.92;5.95,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
-		"label[3.62,3.78;", fgettext("Admin Name"), "]",
-		"field[3.62,4.08;5.95,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
-		"label[3.62,4.94;", fgettext("Admin Password"), "]",
-		"field[3.62,5.24;5.95,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
+		"image[1.0,2.05;2.24,2.2;", wc_texture("wintercraft_servers_button1.png"), "]",
+		"image[3.45,0.82;8.95,7.32;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"label[3.85,1.12;", fgettext("Create Hosted Server"), "]",
+		"label[3.85,1.5;", fgettext("Hosted On"), "]",
+		"box[3.85,1.82;6.1,0.5;#151515aa]",
+		"label[5.38,1.95;", core.formspec_escape(host_address), "]",
+		"label[3.85,2.62;", fgettext("Server Name"), "]",
+		"field[3.85,2.92;6.1,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
+		"label[3.85,3.78;", fgettext("Admin Name"), "]",
+		"field[3.85,4.08;6.1,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
+		"label[3.85,4.94;", fgettext("Admin Password"), "]",
+		"field[3.85,5.24;6.1,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
 		"style[cs_hint;textcolor=#bdb7b0;border=false]",
-		"button[3.62,6.02;5.95,0.58;cs_hint;",
+		"button[3.85,6.02;6.1,0.58;cs_hint;",
 			core.formspec_escape(has_saved_password and
 				fgettext("Leave password empty to keep the saved one.") or hint_text),
 		"]",
 		"style[cs_error;textcolor=#ff8d8d;border=false]",
-		"button[3.62,6.66;5.95,0.58;cs_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("create", "cs_create", 4.1, 7.32, nil, 0.66),
-		wc_action_button("close", "quit", 7.0, 7.32, nil, 0.66),
+		"button[3.85,6.66;6.1,0.58;cs_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("create", "cs_create", 4.28, 7.42, nil, 0.68),
+		wc_action_button("close", "quit", 7.25, 7.42, nil, 0.68),
 	})
 end
 

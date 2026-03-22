@@ -168,8 +168,8 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	retval = retval ..
-		wc_action_button("my_servers", "btn_my_servers", 1.34, 5.6, nil, 0.54) ..
-		wc_action_button("create_server", "btn_create_server", 1.2, 6.2, nil, 0.54)
+		wc_action_button("my_servers", "btn_my_servers", 1.18, 5.56, nil, 0.58) ..
+		wc_action_button("create_server", "btn_create_server", 1.12, 6.18, nil, 0.58)
 
 	local selected_server = find_selected_server()
 
@@ -548,6 +548,15 @@ local function main_button_handler(tabview, fields, name, tabdata)
 	end
 
 	if fields.btn_my_servers then
+		if not wintercraft_account_is_logged_in() then
+			local dlg = create_account_dialog()
+			dlg.data.error_text = fgettext("Sign in before opening My Servers.")
+			dlg:set_parent(tabview)
+			tabview:hide()
+			dlg:show()
+			return true
+		end
+
 		local dlg = create_manage_servers_dialog()
 		dlg:set_parent(tabview)
 		tabview:hide()
@@ -556,6 +565,15 @@ local function main_button_handler(tabview, fields, name, tabdata)
 	end
 
 	if fields.btn_create_server then
+		if not wintercraft_account_is_logged_in() then
+			local dlg = create_account_dialog()
+			dlg.data.error_text = fgettext("Sign in before creating a hosted server.")
+			dlg:set_parent(tabview)
+			tabview:hide()
+			dlg:show()
+			return true
+		end
+
 		local host_address = (fields.te_address or core.settings:get("address") or ""):trim()
 		local host_port = tonumber((fields.te_port or core.settings:get("remote_port") or "30000"):match("^%s*(%d+)%s*$")) or 30000
 		local dlg = create_server_setup_dialog({

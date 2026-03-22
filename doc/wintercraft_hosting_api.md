@@ -1,28 +1,55 @@
-# Wintercraft Hosting API
+# Wintercraft Web API
 
-This launcher can provision and manage hosted Wintercraft servers through an external HTTP API.
+The launcher now uses one shared HTTP API for two features:
 
-## Launcher settings
+- Wintercraft accounts
+- hosted-server ownership and provisioning metadata
 
-Set these values in `minetest.conf` / `luanti.conf` or through the engine settings UI:
+The intended public shape is:
 
-- `wintercraft_hosting_api_url`
-- `wintercraft_hosting_api_token`
-- `wintercraft_hosting_public_host`
+- site homepage on `/`
+- launcher and site API on `/api`
 
-`wintercraft_hosting_api_url` must be the API base URL, without the `/servers` suffix.
-
-Example:
+Example base URL:
 
 ```conf
-wintercraft_hosting_api_url = https://api.example.net/wintercraft
-wintercraft_hosting_api_token = your-secret-token
-wintercraft_hosting_public_host = play.example.net
+wintercraft_api_url = http://192.168.192.143:3200/api
+wintercraft_hosting_public_host = 192.168.192.143
 ```
 
-## Expected endpoints
+`wintercraft_hosting_api_url` is still accepted as a legacy fallback, but `wintercraft_api_url` should be used for new installs.
 
-The launcher uses these endpoints:
+## Auth endpoints
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /auth/logout`
+
+### Register/Login payload
+
+```json
+{
+  "username": "nova",
+  "password": "secret123"
+}
+```
+
+### Register/Login response
+
+```json
+{
+  "token": "session-token",
+  "account": {
+    "id": 1,
+    "username": "nova"
+  }
+}
+```
+
+The launcher stores the bearer token locally and reuses it automatically for hosted-server requests.
+
+## Hosted server endpoints
 
 - `GET /servers`
 - `POST /servers`
@@ -34,66 +61,33 @@ Fallback compatibility endpoints are also supported:
 - `POST /servers/{id}/update`
 - `POST /servers/{id}/delete`
 
-## Request payloads
-
-### Create server
-
-`POST /servers`
+## Hosted server create payload
 
 ```json
 {
   "name": "My Winter Server",
-  "description": "",
+  "description": "Snow map",
   "admin_name": "nova",
   "admin_password": "secret",
   "gameid": "wintercraft_game"
 }
 ```
 
-### Update server
-
-`PUT /servers/{id}`
+## Hosted server response
 
 ```json
 {
-  "name": "My Winter Server",
-  "description": "Snow map",
-  "admin_name": "nova",
-  "admin_password": "secret"
+  "server": {
+    "id": "srv_123",
+    "name": "My Winter Server",
+    "description": "Snow map",
+    "admin_name": "nova",
+    "host_address": "192.168.192.143",
+    "host_port": 30000,
+    "status": "queued",
+    "gameid": "wintercraft_game"
+  }
 }
 ```
 
-## Response shape
-
-The launcher accepts either:
-
-- an array of server objects
-- an object with `servers`
-- an object with `list`
-- an object with `data`
-- a single server object
-
-Each server object may contain:
-
-```json
-{
-  "id": "srv_123",
-  "name": "My Winter Server",
-  "description": "Snow map",
-  "admin_name": "nova",
-  "host_address": "play.example.net",
-  "host_port": 30000
-}
-```
-
-Alternative field names also supported by the launcher:
-
-- `server_id`
-- `server_name`
-- `title`
-- `public_host`
-- `public_address`
-- `server_address`
-- `port`
-
-The launcher keeps the admin password only in local profile storage and does not require the API to return it.
+The API never returns the raw admin password. The launcher may keep a local copy for convenience on the same device.
