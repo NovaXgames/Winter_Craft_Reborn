@@ -40,14 +40,15 @@ local function normalize_server_profile(profile)
 		admin_password = type(profile.admin_password) == "string" and profile.admin_password or "",
 		host_address = host_address,
 		host_port = tonumber(profile.host_port or profile.port) or default_host_port(),
+		hosting_managed = profile.hosting_managed == true or profile.hosting_managed == "true",
 	}
 end
 
 local function is_hosted_server_profile(profile)
-	return profile
-		and profile.name:trim() ~= ""
-		and profile.admin_name:trim() ~= ""
-		and profile.admin_password:trim() ~= ""
+	return profile and (
+		profile.hosting_managed == true or
+		(profile.name:trim() ~= "" and profile.admin_name:trim() ~= "" and profile.admin_password:trim() ~= "")
+	)
 end
 
 local function decode_server_profiles(raw)

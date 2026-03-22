@@ -969,6 +969,17 @@ enable_split_login_register (Enable split login/register) bool true
 #    If this is empty the engine will never check for updates.
 update_information_url (Update information URL) string https://www.luanti.org/release_info.json
 
+#    Base URL of the external Wintercraft hosting API used to create and manage hosted servers.
+#    The launcher will call /servers on this URL.
+wintercraft_hosting_api_url (Wintercraft Hosting API URL) [client] string
+
+#    Bearer token sent to the Wintercraft hosting API.
+wintercraft_hosting_api_token (Wintercraft Hosting API Token) [client] string
+
+#    Public host shown to players for hosted servers.
+#    If empty, the launcher derives it from the hosting API or from the API response.
+wintercraft_hosting_public_host (Wintercraft Hosting Public Host) [client] string
+
 [*Server] [server]
 
 #    Name of the player.

@@ -23,34 +23,39 @@ end
 local function create_server_formspec(dialogdata)
 	local error_text = dialogdata.error_text or ""
 	local has_saved_password = dialogdata.admin_password and dialogdata.admin_password ~= ""
-	local host_address = dialogdata.host_address ~= "" and dialogdata.host_address or fgettext("No host selected")
+	local host_address = dialogdata.host_address ~= "" and dialogdata.host_address or wintercraft_hosting_get_target_label()
+	local hint_text
+	if wintercraft_hosting_is_configured() then
+		hint_text = fgettext("This server will be created on the external Wintercraft host.")
+	else
+		hint_text = fgettext("Set the hosting API URL in Settings to provision on the external host.")
+	end
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[12.8,8.2]",
+		"size[12.9,8.4]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.9,1.9;2.38,2.33;", wc_texture("wintercraft_servers_button1.png"), "]",
-		"image[3.45,0.72;8.6,7.1;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"label[3.92,1.05;", fgettext("Create Server"), "]",
-		"label[3.92,1.48;", fgettext("Hosted On"), "]",
-		"style[cs_host;textcolor=#d4d0cb;border=false]",
-		"button[3.92,1.76;5.6,0.58;cs_host;", core.formspec_escape(host_address), "]",
-		"label[3.92,2.52;", fgettext("Server Name"), "]",
-		"field[3.92,2.82;5.6,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
-		"label[3.92,3.72;", fgettext("Admin Name"), "]",
-		"field[3.92,4.02;5.6,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
-		"label[3.92,4.92;", fgettext("Admin Password"), "]",
-		"field[3.92,5.22;5.6,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
+		"image[0.85,1.95;2.2,2.16;", wc_texture("wintercraft_servers_button1.png"), "]",
+		"image[3.2,0.78;8.9,7.22;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"label[3.62,1.1;", fgettext("Create Hosted Server"), "]",
+		"label[3.62,1.5;", fgettext("Hosted On"), "]",
+		"box[3.62,1.82;5.95,0.5;#151515aa]",
+		"label[4.85,1.95;", core.formspec_escape(host_address), "]",
+		"label[3.62,2.62;", fgettext("Server Name"), "]",
+		"field[3.62,2.92;5.95,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
+		"label[3.62,3.78;", fgettext("Admin Name"), "]",
+		"field[3.62,4.08;5.95,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
+		"label[3.62,4.94;", fgettext("Admin Password"), "]",
+		"field[3.62,5.24;5.95,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
 		"style[cs_hint;textcolor=#bdb7b0;border=false]",
-		"button[3.92,6.05;5.6,0.58;cs_hint;",
+		"button[3.62,6.02;5.95,0.58;cs_hint;",
 			core.formspec_escape(has_saved_password and
-				fgettext("Leave password empty to keep the saved one.") or
-				fgettext("Set the admin password for this hosted server.")),
+				fgettext("Leave password empty to keep the saved one.") or hint_text),
 		"]",
 		"style[cs_error;textcolor=#ff8d8d;border=false]",
-		"button[3.92,6.67;5.6,0.58;cs_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("create", "cs_create", 4.32, 7.18, nil, 0.64),
-		wc_action_button("close", "quit", 7.18, 7.18, nil, 0.64),
+		"button[3.62,6.66;5.95,0.58;cs_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("create", "cs_create", 4.1, 7.32, nil, 0.66),
+		wc_action_button("close", "quit", 7.0, 7.32, nil, 0.66),
 	})
 end
 
@@ -82,7 +87,7 @@ local function create_server_button_handler(this, fields)
 			return true
 		end
 
-		local profile_id = wintercraft_upsert_server_profile({
+		local profile, err = wintercraft_hosting_create_server({
 			id = this.data.id,
 			name = server_name,
 			description = "",
@@ -91,8 +96,11 @@ local function create_server_button_handler(this, fields)
 			host_address = this.data.host_address,
 			host_port = this.data.host_port,
 		})
+		if not profile then
+			this.data.error_text = err or fgettext("Unable to create the hosted server.")
+			return true
+		end
 
-		local profile = wintercraft_find_server_profile(profile_id)
 		core.settings:set("address", profile and profile.host_address or this.data.host_address)
 		core.settings:set("remote_port", profile and profile.host_port or this.data.host_port)
 		core.settings:set("name", admin_name)
@@ -116,7 +124,7 @@ function create_server_setup_dialog(prefill)
 	retval.data.server_name = data.server_name or data.name or ""
 	retval.data.admin_name = data.admin_name or ""
 	retval.data.admin_password = data.admin_password or ""
-	retval.data.host_address = (data.host_address or data.address or core.settings:get("address") or ""):trim()
+	retval.data.host_address = (data.host_address or data.address or wintercraft_hosting_get_public_host() or core.settings:get("address") or ""):trim()
 	retval.data.host_port = tonumber(data.host_port or data.port or core.settings:get("remote_port")) or 30000
 	retval.data.error_text = ""
 	return retval

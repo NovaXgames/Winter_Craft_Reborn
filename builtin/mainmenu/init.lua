@@ -25,6 +25,7 @@ dofile(menupath .. DIR_DELIM .. "common.lua")
 dofile(menupath .. DIR_DELIM .. "serverlistmgr.lua")
 dofile(menupath .. DIR_DELIM .. "game_theme.lua")
 dofile(menupath .. DIR_DELIM .. "wintercraft_server_profiles.lua")
+dofile(menupath .. DIR_DELIM .. "wintercraft_hosting_service.lua")
 dofile(menupath .. DIR_DELIM .. "content" .. DIR_DELIM .. "init.lua")
 
 dofile(menupath .. DIR_DELIM .. "dlg_config_world.lua")

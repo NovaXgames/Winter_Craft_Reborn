@@ -18,6 +18,30 @@ local function copy_profiles()
 	return copy
 end
 
+local function load_profiles(force_sync)
+	local profiles, err
+	if force_sync then
+		profiles, err = wintercraft_hosting_sync_server_profiles()
+	else
+		profiles = wintercraft_get_server_profiles()
+	end
+
+	local copy = {}
+	for _, profile in ipairs(profiles or {}) do
+		copy[#copy + 1] = {
+			id = profile.id,
+			name = profile.name or "",
+			description = profile.description or "",
+			admin_name = profile.admin_name or "",
+			admin_password = profile.admin_password or "",
+			host_address = profile.host_address or "",
+			host_port = tonumber(profile.host_port) or 30000,
+		}
+	end
+
+	return copy, err
+end
+
 local function current_host_address()
 	return (core.settings:get("address") or ""):trim()
 end
@@ -61,7 +85,14 @@ end
 local function render_servers_list(dialogdata)
 	local rows = {}
 	for _, server in ipairs(dialogdata.favorites) do
-		local name = server.name ~= "" and server.name or fgettext("Unnamed server")
+		local name
+		if server.name ~= "" then
+			name = server.name
+		elseif server.id then
+			name = fgettext("Unnamed server")
+		else
+			name = fgettext("New hosted server")
+		end
 		rows[#rows + 1] = core.formspec_escape(name)
 	end
 	return table.concat(rows, ",")
@@ -97,36 +128,41 @@ local function server_formspec(dialogdata)
 	local admin_name = selected.admin_name or ""
 	local admin_password = selected.admin_password or ""
 	local error_text = dialogdata.error_text or ""
-	local host_address = selected.host_address ~= "" and selected.host_address or fgettext("No host selected")
+	local host_address = selected.host_address ~= "" and selected.host_address or wintercraft_hosting_get_target_label()
+	local host_hint = wintercraft_hosting_is_configured() and
+		fgettext("These servers are provisioned through the external Wintercraft host.") or
+		fgettext("Set the hosting API URL in Settings to sync with the external host.")
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[13.3,8.8]",
+		"size[13.8,9.0]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.55,0.68;4.35,7.6;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"image[5.12,0.68;7.65,7.6;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"label[0.95,1.02;", fgettext("Hosted Servers"), "]",
-		"textlist[0.95,1.52;3.55,5.92;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
-		wc_action_button("new", "sv_new", 0.96, 7.56, nil, 0.64),
-		wc_action_button("delete", "sv_delete", 2.88, 7.56, nil, 0.64),
-		"label[5.55,1.02;", fgettext("Hosted On"), "]",
-		"style[sv_host;textcolor=#d4d0cb;border=false]",
-		"button[5.55,1.28;6.0,0.58;sv_host;", core.formspec_escape(host_address), "]",
-		"label[5.55,2.05;", fgettext("Server Name"), "]",
-		"field[5.55,2.35;6.0,0.8;sv_name;;", core.formspec_escape(name), "]",
-		"label[5.55,3.15;", fgettext("Description"), "]",
-		"textarea[5.55,3.45;6.0,1.62;sv_description;;", core.formspec_escape(description), "]",
-		"label[5.55,5.24;", fgettext("Admin Name"), "]",
-		"field[5.55,5.54;2.7,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
-		"label[8.55,5.24;", fgettext("Admin Password"), "]",
-		"field[8.55,5.54;3.0,0.8;sv_admin_password;;", core.formspec_escape(admin_password), "]",
+		"image[0.7,0.8;4.25,7.75;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"image[5.08,0.8;7.95,7.75;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"label[1.05,1.08;", fgettext("Hosted Servers"), "]",
+		"image_button[3.9,0.98;0.58,0.58;", core.formspec_escape(defaulttexturedir .. "refresh.png"), ";sv_refresh;]",
+		"tooltip[sv_refresh;", fgettext("Sync hosted servers"), "]",
+		"textlist[1.05,1.62;3.55,5.95;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
+		wc_action_button("new", "sv_new", 1.0, 7.83, nil, 0.64),
+		wc_action_button("delete", "sv_delete", 2.95, 7.83, nil, 0.64),
+		"label[5.45,1.08;", fgettext("Hosted On"), "]",
+		"box[5.45,1.42;6.25,0.52;#151515aa]",
+		"label[7.25,1.55;", core.formspec_escape(host_address), "]",
+		"label[5.45,2.22;", fgettext("Server Name"), "]",
+		"field[5.45,2.52;6.25,0.8;sv_name;;", core.formspec_escape(name), "]",
+		"label[5.45,3.28;", fgettext("Description"), "]",
+		"textarea[5.45,3.58;6.25,1.85;sv_description;;", core.formspec_escape(description), "]",
+		"label[5.45,5.66;", fgettext("Admin Name"), "]",
+		"field[5.45,5.96;2.85,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
+		"label[8.65,5.66;", fgettext("Admin Password"), "]",
+		"field[8.65,5.96;3.05,0.8;sv_admin_password;;", core.formspec_escape(admin_password), "]",
 		"style[sv_hint;textcolor=#bdb7b0;border=false]",
-		"button[5.55,6.28;6.0,0.58;sv_hint;", core.formspec_escape(fgettext("These servers are hosted on the Wintercraft host.")), "]",
+		"button[5.45,6.78;6.25,0.58;sv_hint;", core.formspec_escape(host_hint), "]",
 		"style[sv_error;textcolor=#ff8d8d;border=false]",
-		"button[5.55,6.9;6.0,0.58;sv_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("save", "sv_save", 5.55, 7.56, nil, 0.64),
-		wc_action_button("use", "sv_use", 7.95, 7.56, nil, 0.64),
-		wc_action_button("close", "quit", 10.3, 7.56, nil, 0.64),
+		"button[5.45,7.4;6.25,0.58;sv_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("save", "sv_save", 5.45, 7.83, nil, 0.64),
+		wc_action_button("use", "sv_use", 7.88, 7.83, nil, 0.64),
+		wc_action_button("close", "quit", 10.28, 7.83, nil, 0.64),
 	})
 end
 
@@ -173,6 +209,12 @@ local function manage_servers_button_handler(this, fields)
 		return true
 	end
 
+	if fields.sv_refresh then
+		dialogdata.favorites, dialogdata.error_text = load_profiles(true)
+		ensure_server_list(dialogdata)
+		return true
+	end
+
 	if fields.sv_new then
 		table.insert(dialogdata.favorites, 1, {
 			id = nil,
@@ -180,7 +222,8 @@ local function manage_servers_button_handler(this, fields)
 			description = "",
 			admin_name = core.settings:get("name") or "",
 			admin_password = "",
-			host_address = current_host_address(),
+			host_address = wintercraft_hosting_get_public_host() ~= "" and
+				wintercraft_hosting_get_public_host() or current_host_address(),
 			host_port = current_host_port(),
 		})
 		dialogdata.selected = 1
@@ -191,7 +234,11 @@ local function manage_servers_button_handler(this, fields)
 	if fields.sv_delete then
 		local selected = get_selected_server(dialogdata)
 		if selected.id then
-			wintercraft_delete_server_profile(selected.id)
+			local ok, err = wintercraft_hosting_delete_server(selected.id)
+			if not ok then
+				dialogdata.error_text = err or fgettext("Unable to delete the hosted server.")
+				return true
+			end
 		end
 		table.remove(dialogdata.favorites, dialogdata.selected)
 		ensure_server_list(dialogdata)
@@ -207,10 +254,17 @@ local function manage_servers_button_handler(this, fields)
 			return true
 		end
 
-		local profile_id = wintercraft_upsert_server_profile(entry)
-		dialogdata.favorites = copy_profiles()
-		dialogdata.selected = find_server_index(dialogdata.favorites, profile_id)
-		dialogdata.error_text = fgettext("Hosted server saved.")
+		local profile, save_err = wintercraft_hosting_update_server(entry)
+		if not profile then
+			dialogdata.error_text = save_err or fgettext("Unable to save the hosted server.")
+			return true
+		end
+
+		dialogdata.favorites, dialogdata.error_text = load_profiles(wintercraft_hosting_is_configured())
+		dialogdata.selected = find_server_index(dialogdata.favorites, profile.id)
+		if dialogdata.error_text == "" or dialogdata.error_text == nil then
+			dialogdata.error_text = fgettext("Hosted server saved.")
+		end
 		return true
 	end
 
@@ -222,8 +276,12 @@ local function manage_servers_button_handler(this, fields)
 			return true
 		end
 
-		local profile_id = wintercraft_upsert_server_profile(entry)
-		local profile = wintercraft_find_server_profile(profile_id)
+		local profile, save_err = wintercraft_hosting_update_server(entry)
+		if not profile then
+			dialogdata.error_text = save_err or fgettext("Unable to save the hosted server.")
+			return true
+		end
+
 		core.settings:set("address", profile and profile.host_address or entry.host_address)
 		core.settings:set("remote_port", profile and profile.host_port or entry.host_port)
 		core.settings:set("name", entry.admin_name)
@@ -241,8 +299,8 @@ end
 
 function create_manage_servers_dialog()
 	local retval = dialog_create("dlg_manage_servers", server_formspec, manage_servers_button_handler, nil)
-	retval.data.favorites = copy_profiles()
+	retval.data.favorites, retval.data.error_text = load_profiles(true)
 	retval.data.selected = 1
-	retval.data.error_text = ""
+	retval.data.error_text = retval.data.error_text or ""
 	return retval
 end
