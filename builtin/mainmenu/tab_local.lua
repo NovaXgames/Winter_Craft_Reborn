@@ -272,24 +272,24 @@ local function get_formspec(tabview, name, tabdata)
 
 	retval = retval ..
 			"bgcolor[#ffffff00;false]" ..
-			"image[1.1,2.02;3.15,3.1;" .. wc_mode_card(selected_mode) .. "]" ..
-			wc_action_button("main_menu", "world_home", 1.47, 5.56, nil, 0.56) ..
-			"image[4.42,1.72;10.92,6.15;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
-			"label[5.08,2.1;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
-			"label[5.08,2.48;" .. fgettext("Select World:") .. "]" ..
-			"textlist[5.08,2.86;9.68,3.42;sp_worlds;" ..
+			"image[1.0,1.98;3.22,3.17;" .. wc_mode_card(selected_mode) .. "]" ..
+			wc_action_button("main_menu", "world_home", 1.38, 5.46, nil, 0.62) ..
+			"image[4.3,1.68;11.05,6.2;" .. wc_texture("wintercraft_panel_wide.png") .. "]" ..
+			"label[4.96,2.08;" .. fgettext("Mode: $1", get_mode_label()) .. "]" ..
+			"label[4.96,2.44;" .. fgettext("Select World:") .. "]" ..
+			"textlist[4.96,2.82;9.82,3.48;sp_worlds;" ..
 			menu_render_worldlist() ..
 			";" .. index .. "]"
 
 	if world then
 		retval = retval ..
-				wc_action_button("delete", "world_delete", 5.74, 6.56, nil, 0.6) ..
-				wc_action_button("select_mods", "world_configure", 8.42, 6.56, nil, 0.6) ..
-				wc_action_button("new", "world_create", 11.79, 6.56, nil, 0.6) ..
-				wc_action_button("play_game", "play", 8.3, 7.18, nil, 0.64)
+				wc_action_button("delete", "world_delete", 5.5, 6.45, nil, 0.64) ..
+				wc_action_button("select_mods", "world_configure", 8.28, 6.45, nil, 0.64) ..
+				wc_action_button("new", "world_create", 11.64, 6.45, nil, 0.64) ..
+				wc_action_button("play_game", "play", 8.08, 7.12, nil, 0.68)
 	else
 		retval = retval ..
-				wc_action_button("new_world", "world_create", 8.37, 6.92, nil, 0.64)
+				wc_action_button("new_world", "world_create", 8.14, 6.84, nil, 0.68)
 	end
 
 	return retval

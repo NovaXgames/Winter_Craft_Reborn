@@ -2,35 +2,43 @@
 -- Copyright (C) 2026 NovaX_Games
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 
-local function copy_favorites()
+local function copy_profiles()
 	local copy = {}
-	local profiles = wintercraft_get_server_profiles()
-	for _, server in ipairs(serverlistmgr.get_favorites()) do
-		local profile = profiles[wintercraft_server_profile_key(server.address or "", server.port)]
+	for _, profile in ipairs(wintercraft_get_server_profiles()) do
 		copy[#copy + 1] = {
-			name = (profile and profile.name) or server.name or "",
-			address = server.address or "",
-			port = server.port,
-			description = (profile and profile.description) or server.description or "",
-			admin_name = profile and profile.admin_name or "",
-			admin_password = profile and profile.admin_password or "",
+			id = profile.id,
+			name = profile.name or "",
+			description = profile.description or "",
+			admin_name = profile.admin_name or "",
+			admin_password = profile.admin_password or "",
+			host_address = profile.host_address or "",
+			host_port = tonumber(profile.host_port) or 30000,
 		}
 	end
 	return copy
 end
 
+local function current_host_address()
+	return (core.settings:get("address") or ""):trim()
+end
+
+local function current_host_port()
+	return tonumber(core.settings:get("remote_port")) or 30000
+end
+
 local function ensure_server_list(dialogdata)
 	if not dialogdata.favorites then
-		dialogdata.favorites = copy_favorites()
+		dialogdata.favorites = copy_profiles()
 	end
 	if #dialogdata.favorites == 0 then
 		dialogdata.favorites = {{
+			id = nil,
 			name = "",
-			address = "",
-			port = 30000,
 			description = "",
 			admin_name = "",
 			admin_password = "",
+			host_address = current_host_address(),
+			host_port = current_host_port(),
 		}}
 	end
 	dialogdata.selected = math.max(1, math.min(dialogdata.selected or 1, #dialogdata.favorites))
@@ -41,9 +49,9 @@ local function get_selected_server(dialogdata)
 	return dialogdata.favorites[dialogdata.selected]
 end
 
-local function find_server_index(servers, address, port)
+local function find_server_index(servers, profile_id)
 	for i, server in ipairs(servers) do
-		if server.address == address and server.port == port then
+		if server.id == profile_id then
 			return i
 		end
 	end
@@ -54,9 +62,7 @@ local function render_servers_list(dialogdata)
 	local rows = {}
 	for _, server in ipairs(dialogdata.favorites) do
 		local name = server.name ~= "" and server.name or fgettext("Unnamed server")
-		local address = server.address ~= "" and server.address or fgettext("No address")
-		local port = server.port or 30000
-		rows[#rows + 1] = core.formspec_escape(("%s (%s:%d)"):format(name, address, port))
+		rows[#rows + 1] = core.formspec_escape(name)
 	end
 	return table.concat(rows, ",")
 end
@@ -87,84 +93,71 @@ local function server_formspec(dialogdata)
 	local selected = get_selected_server(dialogdata)
 
 	local name = selected.name or ""
-	local address = selected.address or ""
-	local port = tostring(selected.port or 30000)
 	local description = selected.description or ""
 	local admin_name = selected.admin_name or ""
-	local has_saved_password = selected.admin_password and selected.admin_password ~= ""
+	local admin_password = selected.admin_password or ""
 	local error_text = dialogdata.error_text or ""
+	local host_address = selected.host_address ~= "" and selected.host_address or fgettext("No host selected")
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[13.9,9.65]",
+		"size[13.3,8.8]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.35,0.45;5.3,8.55;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"image[5.95,0.45;7.55,8.55;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"label[0.65,0.88;", fgettext("My Servers"), "]",
-		"textlist[0.65,1.35;4.65,6.55;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
-		wc_action_button("new", "sv_new", 0.65, 8.25, nil, 0.62),
-		wc_action_button("delete", "sv_delete", 2.75, 8.25, nil, 0.62),
-		"label[6.35,0.88;", fgettext("Server Name"), "]",
-		"field[6.35,1.18;6.45,0.8;sv_name;;", core.formspec_escape(name), "]",
-		"label[6.35,2.2;", fgettext("Address"), "]",
-		"field[6.35,2.5;4.95,0.8;sv_address;;", core.formspec_escape(address), "]",
-		"label[11.55,2.2;", fgettext("Port"), "]",
-		"field[11.55,2.5;1.25,0.8;sv_port;;", core.formspec_escape(port), "]",
-		"label[6.35,3.38;", fgettext("Description"), "]",
-		"textarea[6.35,3.68;6.25,1.85;sv_description;;", core.formspec_escape(description), "]",
-		"label[6.35,5.85;", fgettext("Admin Name"), "]",
-		"field[6.35,6.15;2.95,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
-		"label[9.65,5.85;", fgettext("Admin Password"), "]",
-		"field[9.65,6.15;2.95,0.8;sv_admin_password;;", core.formspec_escape(selected.admin_password or ""), "]",
+		"image[0.55,0.68;4.35,7.6;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"image[5.12,0.68;7.65,7.6;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"label[0.95,1.02;", fgettext("Hosted Servers"), "]",
+		"textlist[0.95,1.52;3.55,5.92;my_servers;", render_servers_list(dialogdata), ";", dialogdata.selected, "]",
+		wc_action_button("new", "sv_new", 0.96, 7.56, nil, 0.64),
+		wc_action_button("delete", "sv_delete", 2.88, 7.56, nil, 0.64),
+		"label[5.55,1.02;", fgettext("Hosted On"), "]",
+		"style[sv_host;textcolor=#d4d0cb;border=false]",
+		"button[5.55,1.28;6.0,0.58;sv_host;", core.formspec_escape(host_address), "]",
+		"label[5.55,2.05;", fgettext("Server Name"), "]",
+		"field[5.55,2.35;6.0,0.8;sv_name;;", core.formspec_escape(name), "]",
+		"label[5.55,3.15;", fgettext("Description"), "]",
+		"textarea[5.55,3.45;6.0,1.62;sv_description;;", core.formspec_escape(description), "]",
+		"label[5.55,5.24;", fgettext("Admin Name"), "]",
+		"field[5.55,5.54;2.7,0.8;sv_admin_name;;", core.formspec_escape(admin_name), "]",
+		"label[8.55,5.24;", fgettext("Admin Password"), "]",
+		"field[8.55,5.54;3.0,0.8;sv_admin_password;;", core.formspec_escape(admin_password), "]",
 		"style[sv_hint;textcolor=#bdb7b0;border=false]",
-		"button[6.35,6.98;6.25,0.6;sv_hint;",
-			core.formspec_escape(has_saved_password and
-				fgettext("Leave password empty to keep the saved one.") or
-				fgettext("Set an admin password for this server.")),
-		"]",
-		"style[sv_error;textcolor=#ff5a5a;border=false]",
-		"button[6.35,7.62;6.25,0.6;sv_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("save", "sv_save", 6.35, 8.25, nil, 0.62),
-		wc_action_button("use", "sv_use", 8.8, 8.25, nil, 0.62),
-		wc_action_button("close", "quit", 11.25, 8.25, nil, 0.62),
+		"button[5.55,6.28;6.0,0.58;sv_hint;", core.formspec_escape(fgettext("These servers are hosted on the Wintercraft host.")), "]",
+		"style[sv_error;textcolor=#ff8d8d;border=false]",
+		"button[5.55,6.9;6.0,0.58;sv_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("save", "sv_save", 5.55, 7.56, nil, 0.64),
+		wc_action_button("use", "sv_use", 7.95, 7.56, nil, 0.64),
+		wc_action_button("close", "quit", 10.3, 7.56, nil, 0.64),
 	})
 end
 
-local function parse_port(raw_port)
-	if not raw_port then
-		return nil
-	end
-	local value = tonumber(raw_port:match("^%s*(%d+)%s*$"))
-	if not value or value < 1 or value > 65535 then
-		return nil
-	end
-	return value
-end
-
 local function apply_fields_to_server(server, fields)
-	local port = parse_port(fields.sv_port)
-	if not port then
-		return nil
-	end
-
-	local address = (fields.sv_address or ""):trim()
-	if address == "" then
-		return nil
-	end
-
 	local name = (fields.sv_name or ""):trim()
-	local description = (fields.sv_description or ""):trim()
 	local admin_name = (fields.sv_admin_name or ""):trim()
-	local admin_password = fields.sv_admin_password ~= "" and fields.sv_admin_password or (server.admin_password or "")
+	local admin_password = (fields.sv_admin_password or ""):trim()
+	local host_address = server.host_address ~= "" and server.host_address or current_host_address()
+
+	if name == "" then
+		return nil, fgettext("Set a server name.")
+	end
+	if host_address == "" then
+		return nil, fgettext("Set the host address in Servers first.")
+	end
+	if admin_name == "" then
+		return nil, fgettext("Set the admin name.")
+	end
+	if admin_password == "" then
+		return nil, fgettext("Set the admin password.")
+	end
 
 	return {
-		name = name ~= "" and name or nil,
-		address = address,
-		port = port,
-		description = description ~= "" and description or nil,
+		id = server.id,
+		name = name,
+		description = (fields.sv_description or ""):trim(),
 		admin_name = admin_name,
 		admin_password = admin_password,
-	}
+		host_address = host_address,
+		host_port = server.host_port or current_host_port(),
+	}, nil
 end
 
 local function manage_servers_button_handler(this, fields)
@@ -182,12 +175,13 @@ local function manage_servers_button_handler(this, fields)
 
 	if fields.sv_new then
 		table.insert(dialogdata.favorites, 1, {
+			id = nil,
 			name = "",
-			address = "",
-			port = 30000,
 			description = "",
-			admin_name = "",
+			admin_name = core.settings:get("name") or "",
 			admin_password = "",
+			host_address = current_host_address(),
+			host_port = current_host_port(),
 		})
 		dialogdata.selected = 1
 		dialogdata.error_text = ""
@@ -196,54 +190,43 @@ local function manage_servers_button_handler(this, fields)
 
 	if fields.sv_delete then
 		local selected = get_selected_server(dialogdata)
-		if selected.address ~= "" and selected.port then
-			serverlistmgr.delete_favorite(selected)
-			wintercraft_delete_server_profile(selected.address, selected.port)
+		if selected.id then
+			wintercraft_delete_server_profile(selected.id)
 		end
-
 		table.remove(dialogdata.favorites, dialogdata.selected)
 		ensure_server_list(dialogdata)
-		dialogdata.error_text = fgettext("Server deleted.")
+		dialogdata.error_text = fgettext("Hosted server deleted.")
 		return true
 	end
 
 	if fields.sv_save then
 		local selected = get_selected_server(dialogdata)
-		local entry = apply_fields_to_server(selected, fields)
+		local entry, err = apply_fields_to_server(selected, fields)
 		if not entry then
-			dialogdata.error_text = fgettext("Set a valid address and port.")
+			dialogdata.error_text = err
 			return true
 		end
 
-		if selected.address and selected.address ~= "" and selected.port and
-				(selected.address ~= entry.address or selected.port ~= entry.port) then
-			serverlistmgr.delete_favorite(selected)
-			wintercraft_delete_server_profile(selected.address, selected.port)
-		end
-
-		serverlistmgr.add_favorite(entry)
-		wintercraft_upsert_server_profile(entry)
-		dialogdata.favorites = copy_favorites()
-		dialogdata.selected = find_server_index(dialogdata.favorites, entry.address, entry.port)
-		dialogdata.error_text = fgettext("Server saved.")
+		local profile_id = wintercraft_upsert_server_profile(entry)
+		dialogdata.favorites = copy_profiles()
+		dialogdata.selected = find_server_index(dialogdata.favorites, profile_id)
+		dialogdata.error_text = fgettext("Hosted server saved.")
 		return true
 	end
 
 	if fields.sv_use then
 		local selected = get_selected_server(dialogdata)
-		local entry = apply_fields_to_server(selected, fields)
+		local entry, err = apply_fields_to_server(selected, fields)
 		if not entry then
-			dialogdata.error_text = fgettext("Set a valid address and port.")
+			dialogdata.error_text = err
 			return true
 		end
 
-		serverlistmgr.add_favorite(entry)
-		wintercraft_upsert_server_profile(entry)
-		core.settings:set("address", entry.address)
-		core.settings:set("remote_port", entry.port)
-		if entry.admin_name and entry.admin_name ~= "" then
-			core.settings:set("name", entry.admin_name)
-		end
+		local profile_id = wintercraft_upsert_server_profile(entry)
+		local profile = wintercraft_find_server_profile(profile_id)
+		core.settings:set("address", profile and profile.host_address or entry.host_address)
+		core.settings:set("remote_port", profile and profile.host_port or entry.host_port)
+		core.settings:set("name", entry.admin_name)
 		this:delete()
 		return true
 	end
@@ -258,7 +241,7 @@ end
 
 function create_manage_servers_dialog()
 	local retval = dialog_create("dlg_manage_servers", server_formspec, manage_servers_button_handler, nil)
-	retval.data.favorites = copy_favorites()
+	retval.data.favorites = copy_profiles()
 	retval.data.selected = 1
 	retval.data.error_text = ""
 	return retval

@@ -20,71 +20,53 @@ local function wc_action_button(id, name, x, y, w, h)
 		";;true;false;" .. wc_texture("wintercraft_btn_" .. id .. "_2.png") .. "]"
 end
 
-local function parse_port(raw_port)
-	if not raw_port then
-		return nil
-	end
-	local value = tonumber(raw_port:match("^%s*(%d+)%s*$"))
-	if not value or value < 1 or value > 65535 then
-		return nil
-	end
-	return value
-end
-
 local function create_server_formspec(dialogdata)
 	local error_text = dialogdata.error_text or ""
 	local has_saved_password = dialogdata.admin_password and dialogdata.admin_password ~= ""
+	local host_address = dialogdata.host_address ~= "" and dialogdata.host_address or fgettext("No host selected")
 
 	return table.concat({
 		"formspec_version[8]",
-		"size[13.6,8.95]",
+		"size[12.8,8.2]",
 		"bgcolor[#ffffff00;false]",
-		"image[0.45,1.95;3.0,2.95;", wc_texture("wintercraft_servers_button1.png"), "]",
-		"image[3.85,0.55;9.25,7.95;", wc_texture("wintercraft_panel_tall.png"), "]",
-		"label[4.35,0.95;", fgettext("Create Server"), "]",
-		"label[4.35,1.48;", fgettext("Server Name"), "]",
-		"field[4.35,1.78;5.95,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
-		"label[4.35,2.75;", fgettext("Address"), "]",
-		"field[4.35,3.05;4.55,0.8;cs_address;;", core.formspec_escape(dialogdata.address or ""), "]",
-		"label[9.15,2.75;", fgettext("Port"), "]",
-		"field[9.15,3.05;1.15,0.8;cs_port;;", core.formspec_escape(tostring(dialogdata.port or 30000)), "]",
-		"label[4.35,4.05;", fgettext("Admin Name"), "]",
-		"field[4.35,4.35;5.95,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
-		"label[4.35,5.3;", fgettext("Admin Password"), "]",
-		"field[4.35,5.6;5.95,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
+		"image[0.9,1.9;2.38,2.33;", wc_texture("wintercraft_servers_button1.png"), "]",
+		"image[3.45,0.72;8.6,7.1;", wc_texture("wintercraft_panel_tall.png"), "]",
+		"label[3.92,1.05;", fgettext("Create Server"), "]",
+		"label[3.92,1.48;", fgettext("Hosted On"), "]",
+		"style[cs_host;textcolor=#d4d0cb;border=false]",
+		"button[3.92,1.76;5.6,0.58;cs_host;", core.formspec_escape(host_address), "]",
+		"label[3.92,2.52;", fgettext("Server Name"), "]",
+		"field[3.92,2.82;5.6,0.8;cs_name;;", core.formspec_escape(dialogdata.server_name or ""), "]",
+		"label[3.92,3.72;", fgettext("Admin Name"), "]",
+		"field[3.92,4.02;5.6,0.8;cs_admin_name;;", core.formspec_escape(dialogdata.admin_name or ""), "]",
+		"label[3.92,4.92;", fgettext("Admin Password"), "]",
+		"field[3.92,5.22;5.6,0.8;cs_admin_password;;", core.formspec_escape(dialogdata.admin_password or ""), "]",
 		"style[cs_hint;textcolor=#bdb7b0;border=false]",
-		"button[4.35,6.42;5.95,0.6;cs_hint;",
+		"button[3.92,6.05;5.6,0.58;cs_hint;",
 			core.formspec_escape(has_saved_password and
 				fgettext("Leave password empty to keep the saved one.") or
-				fgettext("Set the admin password for this server profile.")),
+				fgettext("Set the admin password for this hosted server.")),
 		"]",
 		"style[cs_error;textcolor=#ff8d8d;border=false]",
-		"button[4.35,7.08;5.95,0.6;cs_error;", core.formspec_escape(error_text), "]",
-		wc_action_button("create", "cs_create", 5.0, 7.92, nil, 0.62),
-		wc_action_button("close", "quit", 8.0, 7.92, nil, 0.62),
+		"button[3.92,6.67;5.6,0.58;cs_error;", core.formspec_escape(error_text), "]",
+		wc_action_button("create", "cs_create", 4.32, 7.18, nil, 0.64),
+		wc_action_button("close", "quit", 7.18, 7.18, nil, 0.64),
 	})
 end
 
 local function create_server_button_handler(this, fields)
 	this.data.server_name = fields.cs_name or this.data.server_name
-	this.data.address = fields.cs_address or this.data.address
-	this.data.port = fields.cs_port or this.data.port
 	this.data.admin_name = fields.cs_admin_name or this.data.admin_name
+	this.data.admin_password = fields.cs_admin_password or this.data.admin_password
 	this.data.error_text = ""
 
 	if fields.cs_create then
 		local server_name = (fields.cs_name or ""):trim()
-		local address = (fields.cs_address or ""):trim()
-		local port = parse_port(fields.cs_port)
 		local admin_name = (fields.cs_admin_name or ""):trim()
 		local admin_password = fields.cs_admin_password ~= "" and fields.cs_admin_password or (this.data.admin_password or "")
 
 		if server_name == "" then
 			this.data.error_text = fgettext("Set a server name.")
-			return true
-		end
-		if address == "" or not port then
-			this.data.error_text = fgettext("Set a valid address and port.")
 			return true
 		end
 		if admin_name == "" then
@@ -95,25 +77,24 @@ local function create_server_button_handler(this, fields)
 			this.data.error_text = fgettext("Set the admin password.")
 			return true
 		end
+		if (this.data.host_address or ""):trim() == "" then
+			this.data.error_text = fgettext("Set the host address in Servers first.")
+			return true
+		end
 
-		serverlistmgr.add_favorite({
+		local profile_id = wintercraft_upsert_server_profile({
+			id = this.data.id,
 			name = server_name,
-			address = address,
-			port = port,
-			description = "",
-		})
-
-		wintercraft_upsert_server_profile({
-			name = server_name,
-			address = address,
-			port = port,
 			description = "",
 			admin_name = admin_name,
 			admin_password = admin_password,
+			host_address = this.data.host_address,
+			host_port = this.data.host_port,
 		})
 
-		core.settings:set("address", address)
-		core.settings:set("remote_port", port)
+		local profile = wintercraft_find_server_profile(profile_id)
+		core.settings:set("address", profile and profile.host_address or this.data.host_address)
+		core.settings:set("remote_port", profile and profile.host_port or this.data.host_port)
 		core.settings:set("name", admin_name)
 
 		this:delete()
@@ -131,11 +112,12 @@ end
 function create_server_setup_dialog(prefill)
 	local data = prefill or {}
 	local retval = dialog_create("dlg_create_server", create_server_formspec, create_server_button_handler, nil)
+	retval.data.id = data.id
 	retval.data.server_name = data.server_name or data.name or ""
-	retval.data.address = data.address or ""
-	retval.data.port = tostring(data.port or 30000)
 	retval.data.admin_name = data.admin_name or ""
 	retval.data.admin_password = data.admin_password or ""
+	retval.data.host_address = (data.host_address or data.address or core.settings:get("address") or ""):trim()
+	retval.data.host_port = tonumber(data.host_port or data.port or core.settings:get("remote_port")) or 30000
 	retval.data.error_text = ""
 	return retval
 end
